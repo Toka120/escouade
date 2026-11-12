@@ -1,0 +1,8 @@
+{
+  "applicationId": "fr.carnet.xelor",
+  "version": "1.1.0",
+  "resourcesURL": "https://raw.githubusercontent.com/Toka120/escouade/main/resources.neu",
+  "data": {
+    "notes": "Onglet Paramètres avec mises à jour, choix de la classe, onglet Parcours, donjons de Dofus pour les Noobs."
+  }
+}
