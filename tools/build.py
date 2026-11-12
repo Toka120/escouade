@@ -8,7 +8,7 @@ os.chdir(BUILD_DIR)
 c = json.load(open('neutralino.config.json'))
 c['version'] = ver
 c['logging'] = {'enabled': False, 'writeToLogFile': False}
-c['nativeAllowList'] = ["app.*", "os.open", "window.*", "updater.*", "filesystem.writeBinaryFile"]
+c['nativeAllowList'] = ["app.*", "os.open", "window.*", "updater.*", "filesystem.writeBinaryFile", "filesystem.writeFile", "os.showSaveDialog"]
 c['modes']['window']['title'] = 'Escouade'; c['cli']['binaryName'] = 'Escouade'
 json.dump(c, open('neutralino.config.json','w'), indent=2, ensure_ascii=False)
 s = open(SRC_HTML).read()
