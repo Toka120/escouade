@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escouade</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 34 34%27%3E%3Cpath d=%27M17 2 L30 7 V16 C30 24 24 29.5 17 32 C10 29.5 4 24 4 16 V7 Z%27 fill=%27%23151b29%27 stroke=%27%23e6bb52%27 stroke-width=%272%27/%3E%3Cpath d=%27M10 14 L17 10 L24 14 M10 19 L17 15 L24 19 M10 24 L17 20 L24 24%27 fill=%27none%27 stroke=%27%23e6bb52%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Palette : bleu nuit de bannière + or d'insigne. Layout : barre latérale d'onglets + espace de travail. */
+:root{
+  --bg:#eceff5; --surface:#ffffff; --surface-2:#f4f6fa; --ink:#18203a; --muted:#596381; --line:#d6dbe6;
+  --gold:#8f6400; --gold-soft:#f4e7c3; --blue:#23508c; --blue-soft:#dfe8f5;
+  --ok:#1d7448; --ok-soft:#d9efe3; --warn:#9a5600; --warn-soft:#fbead2; --bad:#ae2a22; --bad-soft:#f8dedb;
+  --display:"Cinzel", "Trajan Pro", Georgia, serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d111b; --surface:#151b29; --surface-2:#1b2233; --ink:#e6e9f1; --muted:#98a2ba; --line:#2a3349;
+    --gold:#e6bb52; --gold-soft:#372c12; --blue:#93b6ea; --blue-soft:#1c2a44;
+    --ok:#63cf98; --ok-soft:#15301f; --warn:#f0a94a; --warn-soft:#3a2810; --bad:#f08178; --bad-soft:#3a1714;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d111b; --surface:#151b29; --surface-2:#1b2233; --ink:#e6e9f1; --muted:#98a2ba; --line:#2a3349;
+  --gold:#e6bb52; --gold-soft:#372c12; --blue:#93b6ea; --blue-soft:#1c2a44;
+  --ok:#63cf98; --ok-soft:#15301f; --warn:#f0a94a; --warn-soft:#3a2810; --bad:#f08178; --bad-soft:#3a1714;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:28px}
+h2{font-size:17px}
+h3{font-size:15px}
+a{color:var(--blue)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.num,td.num,.tab{font-variant-numeric:tabular-nums}
+
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.side{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:10px;align-items:center;padding:0 6px}
+.brand svg{flex:none}
+.brand strong{font-family:var(--display);font-size:16px;display:block;line-height:1.15}
+.brand span{font-size:12px;color:var(--muted)}
+nav{display:flex;flex-direction:column;gap:2px}
+nav a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:600}
+nav a:hover{background:var(--surface-2)}
+nav a.on{background:var(--blue-soft);color:var(--blue)}
+nav a .badge{font-size:12px;font-weight:600;color:var(--muted)}
+nav a .badge.new{background:var(--gold);color:var(--surface);padding:1px 7px;border-radius:99px}
+nav a.on .badge{color:var(--blue)}
+.sync{margin-top:auto;font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center;padding:0 6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
+
+main{padding:28px clamp(16px,3vw,40px) 60px;max-width:1180px;width:100%}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.eyebrow{margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.lead{color:var(--muted);margin:6px 0 0;max-width:62ch}
+
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card > h2{margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card > h2 small{font-family:var(--body);font-size:13px;font-weight:600;color:var(--muted)}
+.tile .label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tile .big{font-size:26px;font-weight:700;margin:4px 0 2px;font-variant-numeric:tabular-nums;line-height:1.2}
+.tile .sub{font-size:13px;color:var(--muted)}
+.tile.gold{border-top:3px solid var(--gold)}
+.tile.blue{border-top:3px solid var(--blue)}
+.tile.ok{border-top:3px solid var(--ok)}
+.tile.warn{border-top:3px solid var(--warn)}
+.bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:8px;border:1px solid var(--line)}
+.bar > i{display:block;height:100%;background:var(--gold);border-radius:99px}
+.bar.blue > i{background:var(--blue)}
+.neg{color:var(--bad)} .pos{color:var(--ok)}
+
+.list{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.row .grow{flex:1;min-width:0}
+.row .t{font-weight:600}
+.row .s{font-size:13px;color:var(--muted)}
+.lvl{font-weight:700;font-variant-numeric:tabular-nums;min-width:38px;text-align:center;padding:2px 6px;border-radius:6px;background:var(--gold-soft);color:var(--gold);font-size:13px}
+.empty{color:var(--muted);font-size:14px;padding:10px 2px}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:var(--surface)}
+.btn.primary:hover{filter:brightness(1.08);color:var(--surface)}
+.btn.small{padding:4px 9px;font-size:13px}
+.btn.ghost{background:transparent}
+.btn.danger:hover{border-color:var(--bad);color:var(--bad)}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;width:26px;height:26px;line-height:1;cursor:pointer;font-weight:700}
+.icon-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+.pill{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700;border:1px solid transparent;cursor:pointer;white-space:nowrap;background:var(--surface-2);color:var(--muted);border-color:var(--line)}
+.pill.st-fait{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.pill.st-succes{background:var(--gold-soft);color:var(--gold);border-color:transparent}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--blue-soft);color:var(--blue)}
+.chip.gold{background:var(--gold-soft);color:var(--gold)}
+.chip.muted{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+input[type=text],input[type=number],input[type=date],select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0;width:100%}
+input:hover,select:hover,textarea:hover{border-color:var(--muted)}
+textarea{resize:vertical;min-height:120px;line-height:1.5}
+.form{display:grid;gap:12px;align-items:end}
+.form.f5{grid-template-columns:1.1fr 2fr 1.2fr 1fr auto}
+.form.f6{grid-template-columns:1fr 2fr .8fr .8fr 1fr auto}
+.form.f4{grid-template-columns:2fr 1fr 2fr auto}
+.check{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--surface-2);padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+td .sub{display:block;font-size:12px;color:var(--muted)}
+tr.here td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+tr.done td{color:var(--muted)}
+tr.done td strong{text-decoration:line-through;text-decoration-color:var(--line)}
+td input[type=text]{padding:5px 8px;font-size:13px}
+td.runs{white-space:nowrap}
+td.runs span{display:inline-block;min-width:24px;text-align:center;font-variant-numeric:tabular-nums}
+.posbtn{border:1px dashed var(--line);background:transparent;border-radius:6px;padding:2px 8px;font-size:13px;cursor:pointer;font-variant-numeric:tabular-nums;white-space:nowrap}
+.posbtn:hover{border-color:var(--gold);color:var(--gold)}
+
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:14px}
+.filters label.f{min-width:150px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:none;background:var(--surface);padding:7px 12px;font-weight:600;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--blue-soft);color:var(--blue)}
+
+.hbars{display:flex;flex-direction:column;gap:8px}
+.hbar{display:grid;grid-template-columns:150px 1fr 110px;gap:10px;align-items:center;font-size:13px}
+.hbar .track{height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.hbar .track i{display:block;height:100%;background:var(--blue)}
+.hbar .track i.out{background:var(--bad)}
+.hbar .v{text-align:right;font-variant-numeric:tabular-nums}
+
+.chart svg{width:100%;height:auto;display:block}
+.chart .axis{stroke:var(--line)}
+.chart .grid-l{stroke:var(--line);stroke-dasharray:3 4}
+.chart .line{fill:none;stroke:var(--gold);stroke-width:2.5}
+.chart .area{fill:var(--gold-soft);opacity:.7}
+.chart .pt{fill:var(--surface);stroke:var(--gold);stroke-width:2}
+.chart .pt.last{fill:var(--gold)}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--body)}
+
+.calc-out{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.calc-out div{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.calc-out b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.calc-out span{font-size:12px;color:var(--muted)}
+.hint{font-size:13px;color:var(--muted);margin:8px 0 0}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+
+.steps .step{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.steps .step input{margin-top:4px}
+.steps .step.done{opacity:.7}
+.steps .step.done .t{text-decoration:line-through;text-decoration-color:var(--muted)}
+.step-h{display:block;cursor:pointer;margin-bottom:6px}
+.step-n{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-right:4px}
+.step .t{font-weight:700}
+.step .s{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.step .s b{color:var(--ink);font-weight:600}
+.dchips{display:flex;flex-wrap:wrap;gap:6px}
+.dchip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;font-variant-numeric:tabular-nums}
+a.dchip:hover{border-color:var(--blue);color:var(--blue)}
+.dchip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.guide-link{font-size:13px;font-weight:600;white-space:nowrap}
+.elem{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.elem div{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);font-size:13px}
+.elem b{display:block;color:var(--ink)}
+.elem span{color:var(--muted)}
+.links{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.links a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;background:var(--surface-2)}
+.links a b{display:block;color:var(--ink)}
+.links a span{font-size:12px;color:var(--muted)}
+.links a:hover{border-color:var(--blue)}
+
+@media (max-width:980px){
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .form.f5,.form.f6{grid-template-columns:1fr 1fr}
+  .form.f4{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .side{position:sticky;top:0;height:auto;z-index:5;padding:10px 12px;gap:8px;border-right:none;border-bottom:1px solid var(--line)}
+  .brand span{display:none}
+  nav{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}
+  nav a{white-space:nowrap;padding:6px 10px}
+  nav a .badge{display:none}
+  .sync{margin-top:0}
+  .g2,.g3{grid-template-columns:1fr}
+  .calc-out{grid-template-columns:1fr}
+  .hbar{grid-template-columns:110px 1fr 90px}
+  .links{grid-template-columns:1fr}
+  h1{font-size:23px}
+}
+@media (max-width:420px){
+  .g4{grid-template-columns:1fr}
+  .form.f5,.form.f6,.form.f4{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+        <path d="M17 2 L30 7 V16 C30 24 24 29.5 17 32 C10 29.5 4 24 4 16 V7 Z" fill="var(--blue-soft)" stroke="var(--gold)" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M10 14 L17 10 L24 14 M10 19 L17 15 L24 19 M10 24 L17 20 L24 24" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div><strong>Escouade</strong><span>Le suivi de ta team</span></div>
+    </div>
+    <nav id="nav" aria-label="Sections"></nav>
+    <div class="sync" id="sync" role="status"><span class="dot"></span><span>Chargement…</span></div>
+  </aside>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- Données de référence ---------- */
+// Niveau | Boss | Donjon | Position | Zone/remarque | page du guide — d'après la liste des donjons de Dofus pour les Noobs.
+const DONJONS_RAW = `10|Kardorim|Crypte de Kardorim|5,-1||crypte-de-kardorim
+20|Tournesol Affamé|Grange du Tournesol Affamé|7,-24||grange-du-tournesol-affame
+20|Mob l'Éponge|Château Ensablé|13,-28||chateau-ensable
+30|Bouftou Royal|Cour du Bouftou Royal|2,-34||cour-du-bouftou-royal
+40|Kankreblath|Cache de Kankreblath|3,-17||cache-de-kankreblath
+40|Boostache|Maison Fantôme|-13,-41||maison-fantome
+40|Scarabosse Doré|Donjon des Scarafeuilles|1,26||donjon-des-scarafeuilles
+40|Chafer Rönin|Donjon des Squelettes|10,15||donjon-des-squelettes
+40|Batofu|Donjon des Tofus|5,6||donjon-des-tofus
+40|Directeur Grunob|Akadémie des Gobs|-5,3||akademie-des-gobs
+50|Bworkette|Donjon des Bworks|-5,10||donjon-des-bworks
+50|Coffre des Forgerons|Donjon des Forgerons|13,21||donjon-des-forgerons
+50|Corailleur Magistral|Grotte Hesque|-59,15||grotte-hesque
+50|Shin Larve|Donjon des Larves|-2,-5||donjon-des-larves
+50|Kwakwa|Nid du Kwakwa|-4,-7||nid-du-kwakwa
+50|Sapik|Donjon de Nowel|-32,-89||donjon-de-nowel
+50|Rakoopeur|Refuge Sylvestre|40,-84||refuge-sylvestre
+51|Grozilla et Grasmera|Grozilla et Grasmera|-51,40|Versions niv. 1, 51, 101 et 151|grozilla-et-grasmera
+60|Wa Wabbit|Château du Wa Wabbit|24,-13||chateau-du-wa-wabbit
+60|Blops Royaux|Clos des Blops|-25,-17||clos-des-blops
+60|Gelées Royales|Gelaxième dimension||Gelaxième dimension|gelaxieme-dimension
+60|Kanniboul Ebil|Village Kanniboul|29,9||village-kanniboul
+60|Mawabouaino|Fonderie des Waddicts|-3,-4||fonderie-des-waddicts
+70|Gourlo le Terrible|Cale de l'Arche d'Otomaï|-55,-4||arche-dotomaiuml
+70|Nelween|Laboratoire de Brumen Tinctorias|-27,17||laboratoire-de-brumen-tinctorias
+70|Craqueleur Légendaire|Pitons Rocheux des Craqueleurs|-3,-7||pitons-rocheux-des-craqueleurs
+70|Draegnerys|Épreuve de Draegnerys|-4,29||epreuve-de-draegnerys
+80|Wa Wobot|Terrier du Wa Wabbit|28,-12||terrier-du-wa-wabbit
+80|Mantiscore|Cimetière des mastodontes|19,-61||cimetiere-des-mastodontes
+90|Reine Nyée|Antre de la Reine Nyée|-6,-15||antre-de-la-reine-nyeacutee
+90|Chouque|Bateau du Chouque|33,3||bateau-du-chouque
+90|Abraknyde Ancestral|Domaine Ancestral|-9,-14||domaine-ancestral
+90|Choudini|Chapiteau des Magik Riktus|-22,12||chapiteau-des-magik-riktus
+100|Dragon Cochon|Antre du Dragon Cochon|-1,33||antre-du-dragon-cochon
+100|Meulou|Tanière du Meulou|-23,0||taniere-du-meulou
+100|Koulosse|Caverne du Koulosse|-17,8||caverne-du-koulosse
+100|Mallefisk|Fabrique de Malléfisk|-6,-2|Dimension Enutrosor|fabrique-mallefisk
+100|Moon|Arbre de Moon|29,6||arbre-de-moon
+100|Halouine|Potager d'Halouine|-1,22|Pendant l'événement Halouine|potager-dhalouine
+100|Maître des Pantins|Théâtre de Dramak|21,7||theacuteacirctre-de-dramak
+100|Kharnozor|Repaire du Kharnozor|-3,25||repaire-du-kharnozor
+110|Maître Corbac|Bibliothèque du Maître Corbac|-15,-62||bibliotheque-du-maitre-corbac
+110|Papa Nowel|Caverne de Nowel|-36,-89||caverne-de-nowel
+110|Rasboul Majeur|Goulet du Rasboul|-51,9||goulet-du-rasboul
+110|Pounicheur|Miausolée du Pounicheur|3,-9|Dimension Écaflipus|miausoleacutee-du-pounicheur
+110|Damadrya|Bambusaie de Damadrya|26,-30||bambusaie-de-damadrya
+110|Rat Blanc|Garde-manger du Rat Blanc|-36,-60||garde-manger-du-rat-blanc
+110|Rat Noir|Sousouricière du Rat Noir|-29,35||sousouriciere-du-rat-noir
+120|Blop Multicolore Royal|Antre du Blop Multicolore Royal|-25,-17||antre-du-blop-multicolore-royal
+120|Fraktale|Mégalithe de Fraktale|7,3|Dimension Xélorium|meacutegalithe-de-fraktale
+120|Minotoror|Centre du Labyrinthe du Minotoror|-42,-17||centre-du-labyrinthe-du-minotoror
+120|Skeunk|Repaire de Skeunk|-20,10||repaire-de-skeunk
+120|Crocabulia|Antre de Crocabulia|-2,25||antre-de-crocabulia
+120|Royalmouth|Serre du Royalmouth|-84,-49|Frigost|serre-du-royalmouth
+120|Tofu Royal|Tofulailler Royal|5,6||tofulailler-royal
+130|Capitaine Ekarlatte|Ring du Capitaine Ekarlatte|6,3|Dimension Srambad|ring-du-capitaine-ekarlatte
+130|Haute Truche|Volière de la Haute Truche|-10,-44||voliegravere-de-la-haute-truche
+130|Croqueleur|Croquanterie|-1,-7||croquanterie
+130|El Piko|Caverne d'El Piko|15,-65||caverne-d-el-piko
+130|Tanukouï San|Atelier du Tanukouï San|26,-24||atelier-du-tanukoui-san
+130|Nagate|Vallée de la Dame des eaux|22,-24||vallee-de-la-dame-des-eaux
+140|Chêne Mou|Clairière du Chêne Mou|-14,-13||clairiegravere-du-checircne-mou
+140|Mansot Royal|Excavation du Mansot Royal|-64,-55|Frigost|excavation-du-mansot-royal
+140|Tynril|Laboratoire du Tynril|-53,20||laboratoire-du-tynril
+140|Founoroshi|Fabrique de foux d'artifice|14,-32||fabrique-de-foux-d-artifice
+140|Hanshi et Shihan|Dojo du Vent|20,-37||dojo-du-vent
+150|Ben le Ripate|Épave du Grolandais violent|-60,-84|Frigost|epave-du-grolandais-violent
+150|Phossile|Galerie du Phossile|-2,-3|Dimension Enutrosor|galerie-du-phossile
+150|Sphincter Cell|Repaire de Sphincter Cell|5,-8||donjon-des-rats-du-chacircteau-damakna
+150|Hell Mina|Tertre du long sommeil|-3,19||tertre-du-long-sommeil
+160|Kimbo|Canopée du Kimbo|-54,16||canopeacutee-du-kimbo
+160|Kanigroula|Grotte de Kanigroula|-5,-54||grotte-de-kanigroula
+160|Obsidiantre|Hypogée de l'Obsidiantre|-71,-83|Frigost|hypogeacutee-de-lobsidiantre
+160|Minotot|Salle du Minotot|-37,-11||minotot
+160|Ush Galesh|Plateau de Ush|7,-3|Dimension Écaflipus|plateau-de-ush
+160|Shogun Tofugawa|Tombe du Shogun Tofugawa|36,-44||tombe-du-shogun-tofugawa
+170|XLII|Horologium de XLII|7,3|Dimension Xélorium|horologium-de-xlii
+170|Tengu Givrefoux|Tanière Givrefoux|-80,-75|Frigost|taniegravere-givrefoux
+170|Père Ver|Boyau du Père Ver|-7,-70||boyau-du-pere-ver
+170|Koumiho|Demeure des Esprits|39,-44||demeure-des-esprits
+170|Supervizœuf|Poste de contrôle du Supervizœuf|24,23||poste-de-controle-du-supervizoeuf
+180|Korriandre|Antre du Korriandre|-73,-69|Frigost|antre-du-korriandre
+180|Kralamoure Géant|Antre du Kralamoure Géant|-60,-8||antre-du-kralamoure-geacuteant
+180|Bworker|Grotte du Bworker|-15,14||grotte-du-bworker
+180|Toxoliath|Cave du Toxoliath|8,8|Dimension Srambad|cave-du-toxoliath
+180|Ougah|Temple du Grand Ougah|-18,28||temple-du-grand-ougah
+180|Père Fwetar|Maison du Papa Nowel|-34,-89||maison-du-papa-nowel
+190|Glourséleste|Antichambre des Gloursons|-63,-75|Frigost|antichambre-des-gloursons
+190|Kolosso|Cavernes du Kolosso|-61,-69|Frigost|cavernes-du-kolosso
+190|Grolloum|Mine de Sakaï|-52,-45||donjon-de-la-mine-de-sakaiuml
+190|Ombre|Pyramide d'Ombre|6,13||pyramide-dombre
+190|Comte Razof|Camp du Comte Razof|-68,30||camp-du-comte-razof
+190|Barbéryl Clochecuivre|Bastion des Marteaux-Aigris|32,-64||bastion-des-marteaux-aigris
+200|Merkator|Aquadôme de Merkator|21,18||aquadocircme-de-merkator
+200|Comte Harebourg|Donjon du Comte Harebourg|-61,-79|Frigost|donjon-du-comte-harebourg
+200|Missiz Frizz|Forgefroide de Missiz Frizz|-70,-81|Frigost|forgefroide-de-missiz-frizz
+200|Nileza|Laboratoire de Nileza|-61,-74|Frigost|laboratoire-de-nileza
+200|Vortex|Œil de Vortex|7,-7|Dimension Xélorium|oeil-de-vortex
+200|Roi Nidas|Palais du roi Nidas|-5,-5|Dimension Enutrosor|palais-du-roi-nidas
+200|Klime|Salons privés de Klime|-63,-86|Frigost|salons-priveacutes-de-klime
+200|Sylargh|Transporteur de Sylargh|-53,-84|Frigost|transporteur-de-sylargh
+200|Reine des Voleurs|Trône de la Cour Sombre|8,-4|Dimension Srambad|trone-de-la-cour-sombre
+200|Protozorreur|Ventre de la baleine|-85,-59||ventre-de-la-baleine
+200|Chaloeil|Défi du Chaloeil|-9,-22|Dimension Écaflipus|defi-du-chaloeil
+200|Larve de Koutoulou|Temple de Koutoulou|27,26||temple-de-koutoulou
+200|Capitaine Meno|Vaisseau du Capitaine Meno|24,27||vaisseau-du-capitaine-meno
+200|Dantinéa|Palais de Dantinéa|19,26||palais-de-dantineacutea
+200|Solar|Tour de Solar|-31,15||tour-de-solar
+200|Bethel|Tour de Bethel|-48,-82||tour-de-bethel
+200|Dazak Martegel|Brasserie du roi Dazak|-62,-70||brasserie-du-roi-dazak
+200|Malice|Malice|-62,-70||malice
+200|Tal Kasha|Chambre de Tal Kasha|12,-77||chambre-de-tal-kasha
+200|Prêtresse de Kao|Temple du dieu Kao|-1,-10||temple-du-dieu-kao
+200|Ilyzaelle|Belvédère d'Ilyzaelle|-72,-77|Frigost|belvedere-d-ilyzaelle
+200|Anerice la Shushess|Manoir des Katrepat|-14,25||manoir-des-katrepat
+200|Torkélonia|Sanctuaire de Torkélonia|-84,-16||sanctuaire-de-torkelonia
+200|Misère|Sentence de la Balance|15,-20||sentence-de-la-balance
+200|Servitude|Fers de la Tyrannie|15,-20||fers-de-la-tyrannie
+200|Guerre|Trône de sang|15,-20||trone-de-sang
+200|Corruption|Arbre de mort|15,-20||arbre-de-mort
+200|Cavaliers de l'Eliocalypse|Tempête de l'Eliocalypse|15,-20||tempete-de-l-eliocalypse
+200|Reine Amirukam|Souvenir d'Imagiro|2,0|Royaume de papier|souvenir-d-imagiro
+200|Roi Imagami|Mémoire d'Orukam|-3,-1|Royaume d'encre|memoire-d-orukam
+200|Kabahal|Rituel de Kabahal|43,-57||rituel-de-kabahal
+200|L'Éternel Conflit|Bataille de l'Aurore Pourpre|1,0||bataille-de-l-aurore-pourpre
+200|Draguisla Bonita|Draguisla Bonita||Archipel de Vulkania|draguisla-bonita
+200|Belladone|Chambre des maléfices|29,-88||chambre-des-malefices
+200|Cire Momore|Caverne de Cire Momore|36,-70||caverne-de-cire-momore
+200|Gargandyas|Temple de Gargandyas|17,8||temple-de-gargandyas
+200|Vénérable Endormi|Breuil du Vénérable|6,9||breuil-du-venerable
+200|Déchireuse|Autel de la Déchireuse|12,2||autel-de-la-dechireuse`;
+const DPLN = "https://www.dofuspourlesnoobs.com/";
+const BASE_DONJONS = DONJONS_RAW.split("\n").map(l => {
+  const [lvl, boss, donjon, pos, zone, slug] = l.split("|");
+  return { lvl: +lvl, boss, donjon: donjon || "", pos: pos || "", zone: zone || "", url: slug ? DPLN + slug + ".html" : "" };
+});
+// Anciennes clés de boss (première version de l'app) vers les noms utilisés par Dofus pour les Noobs.
+const RENAMES = { "Dramak":"Maître des Pantins", "Silf le Rasboul Majeur":"Rasboul Majeur", "Malléfisk":"Mallefisk", "Père Fwetard":"Père Fwetar", "Chafer Ronin":"Chafer Rönin", "Uaino":"Mawabouaino", "Tengu & Fuji Givrefoux":"Tengu Givrefoux", "Comte Razoff":"Comte Razof", "Capitaine Méno":"Capitaine Meno", "Capitaine Ékarlate":"Capitaine Ekarlatte", "Blop Multicolor Royal":"Blop Multicolore Royal", "Bethel Akarna":"Bethel", "Blop Royal":"Blops Royaux" };
+
+// Parcours niveaux 91 à 150 — d'après le guide de progression Dofus 3 (partie 4) de Dofus pour les Noobs.
+const GUIDE_P4 = DPLN + "guide-de-progression-dofus3-p4.html";
+const PARCOURS = [
+  { n:17, tr:"91–110", titre:"Donjons 90 et passage au niveau 100", donjons:["Bateau du Chouque","Chapiteau des Magik Riktus","Antre de la Reine Nyée","Domaine Ancestral","Antre du Dragon Cochon","Repaire du Kharnozor"], quetes:["Tour du propriétaire","Un juge hystérique","Tour d'honneur","Tour de marionnettes"], nq:14, dofus:"Dofus Pourpre (début), Dofus Émeraude (facultatif)" },
+  { n:18, tr:"91–110", titre:"Les donjons difficiles du niveau 100", donjons:["Caverne du Koulosse","Théâtre de Dramak","Arbre de Moon","Tanière du Meulou"], quetes:["Rendez-vous avec la lune","Protéger et sévir","Tour d'horizon","Tour à tour"], nq:8, dofus:"Dokoko (quête Rendez-vous avec la lune)", stuff:"Panoplie du Dragon Cochon, trophées Remueur et Nomade" },
+  { n:19, tr:"91–110", opt:true, titre:"Découverte de la dimension Enutrosor", donjons:["Fabrique de Malléfisk"], quetes:["D'un monde à l'autre","Même pas malle"], nq:3 },
+  { n:20, tr:"91–110", titre:"Donjons 110, deuxième donjon de Nowel, début du Dofus Pourpre", donjons:["Garde-manger du Rat Blanc","Goulet du Rasboul","Sousouricière du Rat Noir","Bibliothèque du Maître Corbac","Caverne de Nowel"], quetes:["Frères ennemis","Des donjons, encore des donjons","Petit Papa Nowel"], nq:9, dofus:"Dofus Pourpre" },
+  { n:21, tr:"111–150", titre:"Découverte de Frigost", donjons:["Serre du Royalmouth"], quetes:["La terre banquise","Bienvenue à Frigost","Les survivants de Frigost"], nq:11, dofus:"Dofus des Glaces (pour plus tard, niv. 180)" },
+  { n:22, tr:"111–150", titre:"Suite du Dofus Pourpre", donjons:["Centre du Labyrinthe du Minotoror","Antre du Blop Multicolore Royal"], quetes:["Des donjons, encore des donjons","Taures et Détours","Tour de table"], nq:5, dofus:"Dofus Pourpre (en pause)" },
+  { n:23, tr:"111–150", titre:"Découverte de Pandala", donjons:["Bambusaie de Damadrya"], quetes:["Le réveil de Pandala","Les grands esprits se rencontrent"], nq:5 },
+  { n:24, tr:"111–150", opt:true, titre:"Dimensions Écaflipus et Xélorium", donjons:["Miausolée du Pounicheur","Mégalithe de Fraktale"], quetes:["Errances Félines","Les temps qui courent"], nq:4 },
+  { n:25, tr:"111–150", titre:"Suite du tour du monde", donjons:["Tofulailler Royal","Antre de Crocabulia","Repaire de Skeunk"], quetes:["Des donjons, encore des donjons","La voie du guerrier"], nq:2, dofus:"Dofus Kaliptus (fin du Repaire de Skeunk)" },
+  { n:26, tr:"111–150", opt:true, titre:"Dimension Srambad et suite du Dofus Pourpre", donjons:["Ring du Capitaine Ekarlatte"], quetes:["L'anneau de Tot","Aux portes de la nuit","Sauvé par le gong"], nq:3, dofus:"Dofus Pourpre" },
+  { n:27, tr:"111–150", titre:"Suite de Pandala et amélioration du stuff", donjons:["Atelier du Tanukouï San","Vallée de la Dame des eaux"], quetes:["Au nom de l'art","La jetée des enfants perdus"], nq:3, stuff:"Équipements à crafter niv. 120 à 140 (liste dans le guide)" },
+  { n:28, tr:"111–150", titre:"Tynrils et suite de Frigost", donjons:["Laboratoire du Tynril","Excavation du Mansot Royal"], quetes:["L'essentiel est dans le Lac Gelé","Les joyeux de la couronne"], nq:11, dofus:"Dofus des Glaces" },
+  { n:29, tr:"111–150", titre:"Deuxième zone de Saharach et Haute Truche", donjons:["Caverne d'El Piko","Volière de la Haute Truche"], quetes:["Privé de désert","Au clair de la dune"], nq:6 },
+  { n:30, tr:"111–150", titre:"Suite du tour du monde et de Pandala", donjons:["Fabrique de foux d'artifice","Dojo du Vent","Clairière du Chêne Mou"], quetes:["Le festival de la lanterne","Sang d'encre"], nq:7, dofus:"Domakuro (fin de Sang d'encre)" }
+];
+const OLD_PRESETS = ["Atteindre le niveau 100","Quête « Tour du monde » (série de donjons)","Quête « Tornade des donjons »","Dofus Émeraude","Dofus Cawotte","Monter un métier de récolte pour financer le stuff"];
+
+const SLOTS = ["Coiffe","Cape","Amulette","Anneau 1","Anneau 2","Ceinture","Bottes","Arme","Bouclier","Familier / Monture","Dofus / Trophée 1","Dofus / Trophée 2","Dofus / Trophée 3","Dofus / Trophée 4","Dofus / Trophée 5","Dofus / Trophée 6"];
+const STATUTS = [["","—"],["acheter","À acheter"],["achete","Acheté"],["equipe","Équipé"]];
+const CARACS = [["pa","PA"],["pm","PM"],["po","Portée"],["vita","Vitalité"],["stat","Stat élément"],["sagesse","Sagesse"],["res","Résist. moyennes %"]];
+const KCATS = ["Drops & ressources","Quêtes & succès","Équipement","Clés de donjon","Consommables","Forgemagie","Monture / familier","Autre"];
+const OCATS = ["Dofus","Quête","Niveau","Stuff","Kamas","Autre"];
+const ELEMENTS = ["À définir","Feu","Eau","Terre","Air","Multi-élément"];
+// Conseils d'élément par classe, résumés d'après le guide « Les éléments des classes » de Huzounet.
+// [terre, feu, eau, air, intérêt multi-élément /4, conseil leveling]
+const CLASSES = {
+  "Crâ":["Repousse en zone, vol de vie, gros dégâts mono-cible","Beaucoup de sorts de zone, très bon pour enchaîner les combats","Retrait PA et PM avec dégâts de zone","Repousse en mono-cible, marche sans ligne de vue, dégâts par marquage",4,"Eau ou Terre (avec Jugement)"],
+  "Écaflip":["Mi-distance, repousse, retrait PA et PM","Dégâts et soin de zone à longue portée","Longue portée, zones en ligne","Courte distance, repousse et s'éloigne",3,"Air ou Eau"],
+  "Eliotrope":["Frappe et attire de loin, désenvoûte, retrait PO","Frappe et soigne en zone","Sans ligne de vue, poison, repousse en ligne","Retrait PM, repousse",2,"Feu ou Air"],
+  "Eniripsa":["Zone par marquage, peu de soin et de portée, repousse","Soin et dégâts de zone à longue portée","Soin et dégâts de zone à courte portée, attire, désenvoûte","Soin et dégâts à longue portée, retrait PM",0,"Eau, Feu ou Air"],
+  "Enutrof":["Retrait PO, gros dégâts en zone et mono-cible","Soin de masse, désenvoûte, tue vite les invocations","Retrait PM de masse, repousse de loin","Retrait PA, repousse à mi-distance, pose la pesanteur",3,"Eau ou Terre"],
+  "Féca":["Courte portée, grandes zones autour du Féca","Longue portée, retrait PM multi-cibles à mi-distance","Repousse, s'éloigne, retire de la PO","Mêlée, tacle et réduit les dégâts adverses",3,"Eau ou Feu"],
+  "Forgelance":["Zone courte portée sans ligne de vue, attire sur la lance","Gros dégâts à courte portée, attire sur la lance, vulnérabilité","Grandes zones à longue portée, attire sur la lance","Zone à mi-distance, repousse",2,"Feu ou Eau"],
+  "Huppermage":["Zone par marquage, repousse de loin","Protection, vol de vie, déplacements longue portée, désenvoûte","Mêlée avec vol de vie pour tenir au contact","Zone, placements et déplacements à longue portée",4,"Terre"],
+  "Iop":["Mêlée et distance, en zone comme en mono-cible","Multi-cibles par marquage, zones par attraction","Mêlée, tank avec boucliers, s'attire aux ennemis","Courte et longue portée, retrait PM, placements",2,"Terre, Eau ou Air"],
+  "Osamodas":["Zone courte portée, placements, résistant","Dégâts et soin de zone à longue portée, désenvoûte","Zones courte portée renforcées, poison","Frappe et repousse de loin, mono-cible et zone",0,"Feu ou Air"],
+  "Ouginak":["Mêlée, vol de vie mono-cible, bon tank","Retrait PM, repousse, zones courte portée","Longue portée, poison, repousse et attire","Mêlée, plus fort avec d'autres joueurs au contact",0,"Eau"],
+  "Pandawa":["Mêlée, vol de vie, survie au contact","Placements courte portée, bons dégâts de zone","Distance, repousse et empoisonne","Distance, repousse et retire des PM",0,"Eau ou Air"],
+  "Roublard":["Bonus sur explosion, désenvoûte, courte distance","Bonus dans le mur de bombes, vol de vie en zone","Zone courte distance, retrait PA","Frappe et repousse de loin, retrait PM",0,"Feu ou Terre"],
+  "Sacrieur":["Zone en mêlée, vol de vie de masse, vulnérabilité","Zone courte portée, repousse, réduit les soins adverses","Courte portée, attire facilement pour les zones","Mêlée, petits placements pour exploiter le tacle",1,"Eau ou Terre"],
+  "Sadida":["Zone longue portée, plus fort près de la forêt","Poison longue portée, gros retrait PM","Vol de vie à courte portée","Contagion de masse, poison, zone",3,"Eau, Feu ou Air (Eau en complément)"],
+  "Sram":["Mono-cible, dégâts accrus sous 50 % de PV","Zone, repousse","Soin de masse au contact, grosse survie","Tacle via le Comploteur, poison, petites zones",2,"Terre ou Air"],
+  "Steamer":["Placements, dégâts autour des tourelles","Tourelles montées facilement, zones renforcées","Frappe et repousse de loin","Tacle via le Chalutier, repousse, zone courte",4,"Feu ou Terre"],
+  "Xélor":["Mono-cible à courte portée par symétrie, désenvoûte","Zone à longue portée, gros vol de vie","Courte portée, retrait PA et regain de PA facile","Mono-cible à longue portée, vol de vie en zone",4,"Feu ou Multi-élément"],
+  "Zobal":["Zone en mêlée, vol de vie, boost de dommages, retrait PM","Mono-cible distance et mêlée, retrait PO, désenvoûte","Repousse en ligne, mono-cible, réduit les dommages adverses","Zone à longue portée, retrait PA",2,"Terre ou Eau"]
+};
+const TABS = [["accueil","Accueil"],["parcours","Parcours"],["progression","Progression"],["donjons","Donjons"],["stuff","Stuff"],["kamas","Kamas"],["objectifs","Objectifs"],["notes","Notes"],["parametres","Paramètres"]];
+const APP_VERSION = "1.1.0";
+const UPDATE_URL = "https://raw.githubusercontent.com/Toka120/escouade/main/update.json";
+
+const today = () => new Date().toISOString().slice(0,10);
+const uid = () => Math.random().toString(36).slice(2,10);
+
+function presets(){
+  return [
+    { id:uid(), titre:"Atteindre le niveau 100", cat:"Niveau", note:"Étapes 17 et 18 du parcours.", fait:false },
+    { id:uid(), titre:"Dofus Pourpre", cat:"Dofus", note:"Commence à l'étape 17, suite aux étapes 20, 22 et 26 (guide Dofus pour les Noobs).", fait:false },
+    { id:uid(), titre:"Dokoko", cat:"Dofus", note:"Avec la quête « Rendez-vous avec la lune » (étape 18).", fait:false },
+    { id:uid(), titre:"Dofus Émeraude", cat:"Dofus", note:"Facultatif selon Dofus pour les Noobs (étape 17). Bonus : 200 Vitalité.", fait:false },
+    { id:uid(), titre:"Quête « Des donjons, encore des donjons »", cat:"Quête", note:"Auprès de Kal Vissi en [-19,30], après « Un juge hystérique ».", fait:false },
+    { id:uid(), titre:"Dofus Kaliptus", cat:"Dofus", note:"À la fin du Repaire de Skeunk (étape 25).", fait:false },
+    { id:uid(), titre:"Monter un métier de récolte pour financer le stuff", cat:"Kamas", note:"Tu n'as aucun métier : un métier de récolte rapporte des kamas sans rien investir.", fait:false }
+  ];
+}
+function defaultState(){
+  return {
+    v:2, updated:0,
+    perso:{ nom:"", serveur:"", classe:"Xélor", niveau:90, objectif:110, element:"À définir" },
+    xp:{ courante:0, prochain:0, parCombat:0, minCombat:3 },
+    sessions:[],
+    donjons:{},
+    customDonjons:[],
+    stuff:{ slots: SLOTS.map(s => ({ slot:s, actuel:"", vise:"", prix:0, statut:"" })), caracs:{} },
+    kamas:{ depart:5000000, ops:[] },
+    objectifs: presets(),
+    parcours:{},
+    notes:{ build:"", combos:"", boss:"" },
+    settings:{ autoUpdate:true },
+    ui:{ djTranche:"moi", djEtat:"tous", djQ:"", objCat:"Tous" }
+  };
+}
+function merge(saved){
+  const d = defaultState();
+  if (!saved || typeof saved !== "object") return d;
+  const out = Object.assign(d, saved);
+  for (const k of ["perso","xp","kamas","notes","ui","settings"]) out[k] = Object.assign(defaultState()[k], saved[k] || {});
+  out.stuff = Object.assign(defaultState().stuff, saved.stuff || {});
+  if (!Array.isArray(out.stuff.slots) || !out.stuff.slots.length) out.stuff.slots = defaultState().stuff.slots;
+  out.stuff.caracs = out.stuff.caracs || {};
+  for (const k of ["sessions","objectifs","customDonjons"]) if (!Array.isArray(out[k])) out[k] = [];
+  if (!Array.isArray(out.kamas.ops)) out.kamas.ops = [];
+  if (!out.donjons || typeof out.donjons !== "object") out.donjons = {};
+  if (!out.parcours || typeof out.parcours !== "object") out.parcours = {};
+  if ((saved.v || 1) < 2) {
+    for (const [a,b] of Object.entries(RENAMES)) if (out.donjons[a] && !out.donjons[b]) { out.donjons[b] = out.donjons[a]; delete out.donjons[a]; }
+    const untouched = out.objectifs.length === OLD_PRESETS.length && out.objectifs.every(o => OLD_PRESETS.includes(o.titre) && !o.fait);
+    if (untouched) out.objectifs = presets();
+    out.v = 2;
+  }
+  return out;
+}
+
+/* ---------- Utilitaires ---------- */
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nf = new Intl.NumberFormat("fr-FR");
+const fmt = n => nf.format(Math.round(n || 0));
+const fmtK = n => fmt(n) + " K";
+function shortK(n){
+  const a = Math.abs(n), s = n < 0 ? "−" : "";
+  if (a >= 1e6) return s + (a/1e6).toLocaleString("fr-FR",{maximumFractionDigits:2}) + " M";
+  if (a >= 1e3) return s + (a/1e3).toLocaleString("fr-FR",{maximumFractionDigits:1}) + " k";
+  return s + fmt(a);
+}
+function parseK(v){
+  if (typeof v === "number") return v;
+  let s = String(v || "").toLowerCase().replace(/\s| | /g,"").replace(/k$|kamas$/, m => m === "k" ? "k" : "");
+  let mult = 1;
+  if (/m$/.test(s)) { mult = 1e6; s = s.slice(0,-1); }
+  else if (/k$/.test(s)) { mult = 1e3; s = s.slice(0,-1); }
+  const n = parseFloat(s.replace(",", "."));
+  return isFinite(n) ? Math.round(n * mult) : 0;
+}
+function getPath(o, p){ return p.split(".").reduce((a,k) => a == null ? a : a[k], o); }
+function setPath(o, p, v){
+  const ks = p.split("."); let a = o;
+  for (let i = 0; i < ks.length - 1; i++){ if (a[ks[i]] == null) a[ks[i]] = {}; a = a[ks[i]]; }
+  a[ks[ks.length-1]] = v;
+}
+function toast(msg){
+  const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 1800);
+}
+async function copyText(txt){
+  try { await navigator.clipboard.writeText(txt); toast("Copié : " + (txt.length > 40 ? "tes données" : txt)); return true; }
+  catch(e){ toast("Copie refusée par le navigateur"); return false; }
+}
+
+/* ---------- Calculs ---------- */
+function allDonjons(){ return BASE_DONJONS.concat(state.customDonjons.map(d => Object.assign({custom:true}, d))).sort((a,b) => a.lvl - b.lvl || a.boss.localeCompare(b.boss, "fr")); }
+function djState(k){ return state.donjons[k] || { etat:"", runs:0, note:"" }; }
+function soldeKamas(){ return state.kamas.depart + state.kamas.ops.reduce((s,o) => s + o.montant, 0); }
+function stuffAcheter(){ return state.stuff.slots.filter(s => s.statut === "acheter").reduce((s,x) => s + (x.prix||0), 0); }
+function aMonNiveau(d){ const n = state.perso.niveau; return d.lvl >= n - 10 && d.lvl <= n + 10; }
+function xpCalc(){
+  const x = state.xp, reste = Math.max(0, (x.prochain||0) - (x.courante||0));
+  const combats = x.parCombat > 0 ? Math.ceil(reste / x.parCombat) : null;
+  const minutes = combats != null ? combats * (x.minCombat || 0) : null;
+  return { reste, combats, minutes };
+}
+const fmtMin = m => m == null ? "—" : m < 60 ? m + " min" : Math.floor(m/60) + " h " + String(m%60).padStart(2,"0");
+
+/* ---------- Sauvegarde ---------- */
+const LS_KEY = "carnet-xelor-v1";
+let state = defaultState();
+let dbRef = null, saving = false, pending = false, saveTimer = null, cloudReady = false;
+try { const raw = localStorage.getItem(LS_KEY); if (raw) state = merge(JSON.parse(raw)); } catch(e){}
+
+function setSync(kind){
+  const el = document.getElementById("sync");
+  const m = {
+    loading:["", "Connexion à ta sauvegarde…"],
+    cloud:["ok", "Sauvegardé sur ton compte"],
+    saving:["warn", "Enregistrement…"],
+    local:["warn", "Sauvegarde sur cet appareil uniquement"],
+    error:["bad", "Échec de la sauvegarde, réessai à la prochaine modif"]
+  }[kind];
+  el.innerHTML = `<span class="dot ${m[0]}"></span><span>${m[1]}</span>`;
+}
+function persist(){
+  state.updated = Date.now();
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){}
+  if (!dbRef) { setSync("local"); return; }
+  setSync("saving");
+  clearTimeout(saveTimer); saveTimer = setTimeout(flush, 700);
+}
+async function flush(){
+  if (!dbRef) return;
+  if (saving) { pending = true; return; }
+  saving = true;
+  try { await dbRef.set({ json: JSON.stringify(state), updated: state.updated }); setSync("cloud"); }
+  catch(e){ if (e && e.code === "unavailable") { setTimeout(flush, 1500 + Math.random()*1000); } else setSync("error"); }
+  saving = false;
+  if (pending) { pending = false; flush(); }
+}
+async function initCloud(){
+  setSync("loading");
+  const timer = setTimeout(() => { if (!cloudReady) setSync("local"); }, 10000);
+  try {
+    if (!window.claude || typeof window.claude.use !== "function") { clearTimeout(timer); setSync("local"); return; }
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    const id = user ? await user.id() : null;
+    if (!db || !id) { clearTimeout(timer); setSync("local"); return; }
+    const ref = db.doc("data/users/" + id + "/carnet");
+    const snap = await ref.get();
+    clearTimeout(timer);
+    dbRef = ref; cloudReady = true;
+    if (snap.exists) {
+      const body = snap.data();
+      let cloud = null; try { cloud = JSON.parse(body.json); } catch(e){}
+      if (cloud && (cloud.updated || 0) >= (state.updated || 0)) {
+        state = merge(cloud);
+        try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){}
+        render(); setSync("cloud"); return;
+      }
+    }
+    if (!state.updated) state.updated = Date.now();
+    await flush();
+  } catch(e){ clearTimeout(timer); dbRef = null; setSync("local"); }
+}
+
+/* ---------- Rendu ---------- */
+function current(){ const h = location.hash.slice(1); return TABS.some(t => t[0] === h) ? h : "accueil"; }
+function renderNav(){
+  const c = current();
+  const done = Object.values(state.donjons).filter(d => d.etat).length;
+  const badges = {
+    accueil: "niv. " + state.perso.niveau,
+    parcours: PARCOURS.filter(e => state.parcours[e.n]).length + "/" + PARCOURS.length,
+    donjons: done + "/" + allDonjons().length,
+    kamas: shortK(soldeKamas()),
+    objectifs: state.objectifs.filter(o => !o.fait).length + " en cours",
+    parametres: upd.state === "available" ? "Mise à jour" : ""
+  };
+  document.getElementById("nav").innerHTML = TABS.map(([k,l]) =>
+    `<a href="#${k}" class="${k===c?"on":""}" ${k===c?'aria-current="page"':""}><span>${l}</span>${badges[k]?`<span class="badge ${k==="parametres"?"new":""}">${esc(badges[k])}</span>`:""}</a>`).join("");
+}
+function render(){
+  renderNav();
+  const v = current();
+  const fn = { parametres:vParametres, accueil:vAccueil, parcours:vParcours, progression:vProgression, donjons:vDonjons, stuff:vStuff, kamas:vKamas, objectifs:vObjectifs, notes:vNotes }[v];
+  const main = document.getElementById("main");
+  const y = window.scrollY;
+  main.innerHTML = fn();
+  window.scrollTo(0, y);
+}
+
+function head(eyebrow, title, lead, right){
+  return `<header class="page-head"><div><p class="eyebrow">${eyebrow}</p><h1>${title}</h1>${lead?`<p class="lead">${lead}</p>`:""}</div>${right||""}</header>`;
+}
+
+function vAccueil(){
+  const p = state.perso, solde = soldeKamas(), achat = stuffAcheter(), reste = solde - achat;
+  const dj = allDonjons(), faits = dj.filter(d => djState(d.boss).etat).length;
+  const proches = dj.filter(d => aMonNiveau(d) && !djState(d.boss).etat);
+  const objs = state.objectifs.filter(o => !o.fait);
+  const pctObj = Math.min(100, Math.max(0, p.objectif > 0 ? (p.niveau / p.objectif) * 100 : 0));
+  const xc = xpCalc();
+  const last = state.sessions.slice().sort((a,b) => (b.date||"").localeCompare(a.date||""))[0];
+  return head(`${esc(p.classe)} · ${esc(p.element)}${p.serveur?" · "+esc(p.serveur):""}`, esc(p.nom || "Mon perso"),
+    `Niveau ${p.niveau}, objectif ${p.objectif}. Voici où tu en es et quoi faire ensuite.`,
+    `<a class="btn" href="#progression">Modifier mon perso</a>`) + `
+  <div class="grid g4">
+    <div class="card tile gold"><div class="label">Niveau</div><div class="big">${p.niveau} <span style="font-size:15px;color:var(--muted)">/ ${p.objectif}</span></div>
+      <div class="sub">${p.objectif > p.niveau ? "Encore " + (p.objectif - p.niveau) + " niveaux" : "Objectif atteint, fixe le suivant"}</div><div class="bar"><i style="width:${pctObj}%"></i></div></div>
+    <div class="card tile blue"><div class="label">Kamas</div><div class="big">${shortK(solde)}</div><div class="sub">${fmtK(solde)}</div></div>
+    <div class="card tile ${reste < 0 ? "warn" : "ok"}"><div class="label">Stuff à acheter</div><div class="big">${shortK(achat)}</div>
+      <div class="sub">${achat ? (reste < 0 ? `<span class="neg">Il te manque ${shortK(-reste)}</span>` : `Il te resterait ${shortK(reste)}`) : `<a href="#stuff">Planifie ton stuff</a>`}</div></div>
+    <div class="card tile"><div class="label">Donjons faits</div><div class="big">${faits} <span style="font-size:15px;color:var(--muted)">/ ${dj.length}</span></div>
+      <div class="sub">${proches.length} à faire autour de ton niveau</div><div class="bar blue"><i style="width:${dj.length?faits/dj.length*100:0}%"></i></div></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <section class="card"><h2>Donjons à ton niveau <small>niv. ${p.niveau-10} à ${p.niveau+10}</small></h2>
+      ${proches.length ? `<ul class="list">${proches.slice(0,8).map(d => `
+        <li class="row"><span class="lvl">${d.lvl}</span><div class="grow"><div class="t">${esc(d.boss)}</div>${(d.donjon||d.zone)?`<div class="s">${esc([d.donjon,d.zone].filter(Boolean).join(" · "))}</div>`:""}</div>
+        ${d.pos?`<button class="posbtn" data-act="copy" data-v="[${esc(d.pos)}]" title="Copier la position">[${esc(d.pos)}]</button>`:""}
+        ${d.url?`<a class="guide-link" href="${d.url}" target="_blank" rel="noopener">Guide</a>`:""}
+        <button class="btn small" data-act="dj-done" data-k="${esc(d.boss)}">Fait</button></li>`).join("")}</ul>
+        ${proches.length > 8 ? `<p class="hint"><a href="#donjons">Voir les ${proches.length} donjons</a></p>` : ""}`
+      : `<p class="empty">Tous les donjons de ta tranche sont faits. Bien joué.</p>`}
+    </section>
+    <div class="grid" style="align-content:start">
+      ${(() => { const nx = nextEtape(); return `<section class="card"><h2>Prochaine étape du parcours <small><a href="#parcours">Voir le parcours</a></small></h2>
+        ${nx ? `<p style="margin:0"><span class="step-n">Étape ${nx.n}</span> <b>${esc(nx.titre)}</b></p><div class="dchips" style="margin-top:8px">${nx.donjons.map(n => `<span class="dchip">${esc(n)}</span>`).join("")}</div>${nx.dofus?`<p class="hint">Dofus : ${esc(nx.dofus)}</p>`:""}`
+        : `<p class="empty" style="padding:0">Parcours 91 à 150 terminé.</p>`}</section>`; })()}
+      <section class="card"><h2>Objectifs en cours <small><a href="#objectifs">Tout voir</a></small></h2>
+        ${objs.length ? `<ul class="list">${objs.slice(0,5).map(o => `
+          <li class="row"><input type="checkbox" id="o-${o.id}" data-act="obj-toggle" data-id="${o.id}" aria-label="Terminer ${esc(o.titre)}">
+          <label class="grow" for="o-${o.id}"><div class="t">${esc(o.titre)}</div>${o.note?`<div class="s">${esc(o.note)}</div>`:""}</label><span class="chip">${esc(o.cat)}</span></li>`).join("")}</ul>`
+        : `<p class="empty">Aucun objectif en cours.</p>`}
+      </section>
+      <section class="card"><h2>Prochain niveau</h2>
+        ${xc.combats != null ? `<p style="margin:0">Environ <b>${fmt(xc.combats)} combats</b> et <b>${fmtMin(xc.minutes)}</b> pour passer niveau ${p.niveau+1}.</p>`
+          : `<p class="empty" style="padding:0">Renseigne ta barre d'XP dans <a href="#progression">Progression</a> pour estimer le temps restant.</p>`}
+        ${last ? `<p class="hint">Dernière session le ${esc(last.date)} : ${esc(last.activite||"sans titre")}${last.kamas?`, ${shortK(last.kamas)} gagnés`:""}.</p>` : ""}
+      </section>
+    </div>
+  </div>`;
+}
+
+function nextEtape(){ return PARCOURS.find(e => !state.parcours[e.n] && !e.opt) || PARCOURS.find(e => !state.parcours[e.n]); }
+function etapeCard(e){
+  const done = !!state.parcours[e.n];
+  const chips = e.donjons.map(name => {
+    const d = allDonjons().find(x => x.donjon === name);
+    const fait = d && djState(d.boss).etat;
+    const label = `${d ? d.lvl + " · " : ""}${esc(name)}${fait ? " ✓" : ""}`;
+    return d && d.url ? `<a class="dchip ${fait?"ok":""}" href="${d.url}" target="_blank" rel="noopener" title="Guide du donjon sur Dofus pour les Noobs">${label}</a>` : `<span class="dchip ${fait?"ok":""}">${label}</span>`;
+  }).join("");
+  const autres = e.nq - e.quetes.length;
+  return `<li class="step ${done?"done":""}">
+    <input type="checkbox" id="et-${e.n}" data-act="etape" data-n="${e.n}" ${done?"checked":""} aria-label="Étape ${e.n} terminée">
+    <div class="grow">
+      <label for="et-${e.n}" class="step-h"><span class="step-n">Étape ${e.n}</span> <span class="t">${esc(e.titre)}</span>${e.opt?' <span class="chip muted">facultatif</span>':""}</label>
+      <div class="dchips">${chips}</div>
+      <p class="s"><b>Quêtes clés :</b> ${e.quetes.map(esc).join(", ")}${autres > 0 ? ` (+${autres} ${autres > 1 ? "autres" : "autre"} dans le guide)` : ""}</p>
+      ${e.dofus ? `<p class="s"><b>Dofus :</b> ${esc(e.dofus)}</p>` : ""}
+      ${e.stuff ? `<p class="s"><b>Équipement :</b> ${esc(e.stuff)}</p>` : ""}
+    </div></li>`;
+}
+function vParcours(){
+  const n = PARCOURS.filter(e => state.parcours[e.n]).length, nx = nextEtape();
+  const part = (tr, titre) => `<section class="card" style="margin-top:16px"><h2>${titre} <small>niv. ${tr.replace("–"," à ")}</small></h2>
+    <ul class="list steps">${PARCOURS.filter(e => e.tr === tr).map(etapeCard).join("")}</ul></section>`;
+  return head("Parcours", "Ton parcours du niveau 91 à 150",
+    `Les étapes 17 à 30 du guide de progression Dofus 3 de Dofus pour les Noobs. Coche une étape quand elle est finie ; les donjons cochés dans l'onglet Donjons apparaissent avec ✓.`,
+    `<a class="btn" href="${GUIDE_P4}" target="_blank" rel="noopener">Ouvrir le guide complet</a>`) + `
+  <div class="grid g2">
+    <div class="card tile gold"><div class="label">Étapes terminées</div><div class="big">${n} / ${PARCOURS.length}</div><div class="bar"><i style="width:${n/PARCOURS.length*100}%"></i></div></div>
+    <div class="card tile blue"><div class="label">Prochaine étape</div><div class="big" style="font-size:19px">${nx ? "Étape " + nx.n + " · " + esc(nx.titre) : "Parcours terminé"}</div><div class="sub">${nx ? "Tranche " + nx.tr : "Passe à la partie 5 du guide (niv. 151 à 200)"}</div></div>
+  </div>
+  ${part("91–110", "La tranche réputée difficile")}
+  ${part("111–150", "Nouvelles zones et quêtes des Dofus")}
+  <p class="note">Source : <a href="${GUIDE_P4}" target="_blank" rel="noopener">Guide de progression Dofus 3, partie 4 (Dofus pour les Noobs)</a>. Le guide détaille chaque quête et l'ordre exact.</p>`;
+}
+
+function levelChart(){
+  const pts = state.sessions.filter(s => s.niveauFin).slice().sort((a,b) => (a.date||"").localeCompare(b.date||""));
+  if (pts.length < 2) return `<p class="empty">Le graphique apparaît après 2 sessions enregistrées.</p>`;
+  const W = 640, H = 200, L = 36, R = 14, T = 14, B = 26;
+  const lv = pts.map(p => p.niveauFin), mn = Math.min(...lv) - 1, mx = Math.max(...lv) + 1;
+  const x = i => L + (W-L-R) * (pts.length === 1 ? 0 : i/(pts.length-1));
+  const y = v => T + (H-T-B) * (1 - (v-mn)/(mx-mn));
+  const line = pts.map((p,i) => `${x(i).toFixed(1)},${y(p.niveauFin).toFixed(1)}`).join(" ");
+  const area = `${L},${H-B} ${line} ${x(pts.length-1).toFixed(1)},${H-B}`;
+  const ticks = [mn+1, Math.round((mn+mx)/2), mx-1].filter((v,i,a) => a.indexOf(v) === i);
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du niveau par session">
+    ${ticks.map(t => `<line class="grid-l" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text x="${L-6}" y="${y(t)+4}" text-anchor="end">${t}</text>`).join("")}
+    <line class="axis" x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}"/>
+    <polygon class="area" points="${area}"/><polyline class="line" points="${line}"/>
+    ${pts.map((p,i) => `<circle class="pt ${i===pts.length-1?"last":""}" cx="${x(i)}" cy="${y(p.niveauFin)}" r="${i===pts.length-1?5:3.5}"/>`).join("")}
+    <text x="${L}" y="${H-8}">${esc(pts[0].date)}</text><text x="${W-R}" y="${H-8}" text-anchor="end">${esc(pts[pts.length-1].date)}</text>
+  </svg></div>`;
+}
+
+function vProgression(){
+  const p = state.perso, x = state.xp, xc = xpCalc();
+  const sess = state.sessions.slice().sort((a,b) => (b.date||"").localeCompare(a.date||""));
+  const totK = state.sessions.reduce((s,a) => s + (a.kamas||0), 0), totMin = state.sessions.reduce((s,a) => s + (a.duree||0), 0);
+  return head("Progression", "Ton personnage et ton XP", "Mets à jour ton niveau, estime le temps jusqu'au prochain et garde une trace de tes sessions.") + `
+  <div class="grid g2">
+    <section class="card"><h2>Personnage</h2>
+      <div class="grid g2" style="gap:12px">
+        <label class="f">Nom du perso<input type="text" id="p-nom" data-bind="perso.nom" value="${esc(p.nom)}" placeholder="Ton pseudo"></label>
+        <label class="f">Serveur<input type="text" id="p-serv" data-bind="perso.serveur" value="${esc(p.serveur)}" placeholder="Ex. Draconiros"></label>
+        <label class="f">Niveau actuel<input type="number" id="p-niv" min="1" max="200" data-bind="perso.niveau" data-type="int" value="${p.niveau}"></label>
+        <label class="f">Niveau visé<input type="number" id="p-obj" min="1" max="200" data-bind="perso.objectif" data-type="int" value="${p.objectif}"></label>
+        <label class="f">Classe<select id="p-classe" data-bind="perso.classe">${Object.keys(CLASSES).map(c => `<option ${c===p.classe?"selected":""}>${c}</option>`).join("")}</select></label>
+        <label class="f">Élément principal<select id="p-elem" data-bind="perso.element">${ELEMENTS.map(e => `<option ${e===p.element?"selected":""}>${e}</option>`).join("")}</select></label>
+      </div>
+      ${(() => { const c = CLASSES[p.classe]; if (!c) return ""; const stars = "★".repeat(c[4]) + "☆".repeat(4 - c[4]); return `
+      <p class="hint"><b>Conseil Huzounet pour le ${esc(p.classe)} :</b> ${esc(c[5])} pour le leveling. Intérêt du multi-élément : <span title="${c[4]} sur 4">${stars}</span>.</p>
+      <div class="elem">
+        <div><b>Terre</b><span>${esc(c[0])}</span></div>
+        <div><b>Feu</b><span>${esc(c[1])}</span></div>
+        <div><b>Eau</b><span>${esc(c[2])}</span></div>
+        <div><b>Air</b><span>${esc(c[3])}</span></div>
+      </div>
+      <p class="note">Résumé du guide <a href="https://huzounet.fr/guides/les-elements-des-classes" target="_blank" rel="noopener">Les éléments des classes</a> de Huzounet.</p>`; })()}
+    </section>
+    <section class="card"><h2>Calcul du prochain niveau</h2>
+      <div class="grid g2" style="gap:12px">
+        <label class="f">XP actuelle<input type="text" inputmode="numeric" id="x-cur" data-bind="xp.courante" data-type="k" value="${x.courante?fmt(x.courante):""}" placeholder="Lue sur ta barre d'XP"></label>
+        <label class="f">XP du niveau suivant<input type="text" inputmode="numeric" id="x-next" data-bind="xp.prochain" data-type="k" value="${x.prochain?fmt(x.prochain):""}" placeholder="Le chiffre de droite"></label>
+        <label class="f">XP moyenne par combat<input type="text" inputmode="numeric" id="x-fight" data-bind="xp.parCombat" data-type="k" value="${x.parCombat?fmt(x.parCombat):""}" placeholder="Ex. 45k"></label>
+        <label class="f">Minutes par combat<input type="number" id="x-min" min="0" step="0.5" data-bind="xp.minCombat" data-type="float" value="${x.minCombat}"></label>
+      </div>
+      <div class="calc-out">
+        <div><b>${xc.reste ? shortK(xc.reste) : "—"}</b><span>XP restante</span></div>
+        <div><b>${xc.combats != null ? fmt(xc.combats) : "—"}</b><span>combats</span></div>
+        <div><b>${fmtMin(xc.minutes)}</b><span>de jeu estimé</span></div>
+      </div>
+      <p class="hint">Survole ta barre d'XP en jeu pour lire les deux valeurs. Tu peux écrire « 45k » ou « 1,2m ».</p>
+    </section>
+  </div>
+  <section class="card" style="margin-top:16px"><h2>Journal de sessions <small>${state.sessions.length} sessions · ${fmtMin(totMin)} · ${shortK(totK)} gagnés</small></h2>
+    <form class="form f6" data-form="session">
+      <label class="f">Date<input type="date" id="s-date" name="date" value="${today()}" required></label>
+      <label class="f">Activité<input type="text" id="s-act" name="activite" placeholder="Ex. Reine Nyée ×3" required></label>
+      <label class="f">Durée (min)<input type="number" id="s-dur" name="duree" min="0" placeholder="60"></label>
+      <label class="f">Niveau fin<input type="number" id="s-niv" name="niveauFin" min="1" max="200" value="${p.niveau}"></label>
+      <label class="f">Kamas gagnés<input type="text" id="s-k" name="kamas" placeholder="Ex. 150k"></label>
+      <button class="btn primary" type="submit">Ajouter</button>
+    </form>
+    <p class="hint">Les kamas gagnés sont ajoutés à ton livre de comptes, et ton niveau se met à jour tout seul.</p>
+    <div style="margin-top:14px">${levelChart()}</div>
+    ${sess.length ? `<div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>Date</th><th>Activité</th><th>Durée</th><th>Niveau</th><th>Kamas</th><th></th></tr></thead><tbody>
+      ${sess.map(s => `<tr><td class="num">${esc(s.date)}</td><td>${esc(s.activite)}</td><td class="num">${s.duree?fmtMin(s.duree):"—"}</td><td class="num">${s.niveauFin||"—"}</td><td class="num">${s.kamas?shortK(s.kamas):"—"}</td>
+      <td><button class="btn small ghost danger" data-act="sess-del" data-id="${s.id}" aria-label="Supprimer la session">Suppr.</button></td></tr>`).join("")}
+    </tbody></table></div>` : ""}
+  </section>`;
+}
+
+function vDonjons(){
+  const u = state.ui, n = state.perso.niveau, all = allDonjons(), q = (u.djQ||"").toLowerCase().trim();
+  const tranches = [["moi",`Mon niveau (${n-10}–${n+10})`],["tous","Tous"],["1-50","1–50"],["51-100","51–100"],["101-150","101–150"],["151-200","151–200"]];
+  const list = all.filter(d => {
+    if (u.djTranche === "moi" && !aMonNiveau(d)) return false;
+    if (/^\d+-\d+$/.test(u.djTranche)) { const [a,b] = u.djTranche.split("-").map(Number); if (d.lvl < a || d.lvl > b) return false; }
+    const st = djState(d.boss).etat;
+    if (u.djEtat === "afaire" && st) return false;
+    if (u.djEtat === "fait" && !st) return false;
+    if (q && !(d.boss + " " + d.donjon + " " + d.zone).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const faits = all.filter(d => djState(d.boss).etat).length, succes = all.filter(d => djState(d.boss).etat === "succes").length;
+  const runs = Object.values(state.donjons).reduce((s,d) => s + (d.runs||0), 0);
+  const lbl = { "":"À faire", fait:"Fait", succes:"Succès ✓" };
+  return head("Donjons", "Suivi des donjons", "Clique sur l'état pour passer de « À faire » à « Fait » puis « Succès ». Clique sur une position pour la copier.") + `
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card tile ok"><div class="label">Faits</div><div class="big">${faits} / ${all.length}</div><div class="bar"><i style="width:${all.length?faits/all.length*100:0}%;background:var(--ok)"></i></div></div>
+    <div class="card tile gold"><div class="label">Succès validés</div><div class="big">${succes}</div><div class="sub">Défis et succès de donjon</div></div>
+    <div class="card tile blue"><div class="label">Passages comptés</div><div class="big">${runs}</div><div class="sub">Utile pour suivre ton farm de drop</div></div>
+  </div>
+  <section class="card">
+    <div class="filters">
+      <label class="f">Tranche<select id="dj-tr" data-bind="ui.djTranche">${tranches.map(([k,l]) => `<option value="${k}" ${k===u.djTranche?"selected":""}>${l}</option>`).join("")}</select></label>
+      <div><div class="f" style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px">État</div>
+        <div class="seg" role="group" aria-label="Filtrer par état">${[["tous","Tous"],["afaire","À faire"],["fait","Faits"]].map(([k,l]) => `<button type="button" class="${u.djEtat===k?"on":""}" data-act="dj-filter" data-v="${k}">${l}</button>`).join("")}</div></div>
+      <label class="f" style="flex:1;min-width:180px">Rechercher<input type="text" id="dj-q" data-bind="ui.djQ" data-live="search" value="${esc(u.djQ)}" placeholder="Boss, donjon ou zone"></label>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Niv.</th><th>Boss / donjon</th><th>Position</th><th>État</th><th>Passages</th><th style="min-width:180px">Note (drops, astuces)</th><th>Guide</th></tr></thead><tbody id="dj-body">
+      ${list.length ? list.map(d => { const s = djState(d.boss); return `
+      <tr class="${aMonNiveau(d)?"here":""} ${s.etat?"done":""}">
+        <td class="num"><span class="lvl">${d.lvl}</span></td>
+        <td><strong>${esc(d.boss)}</strong>${(d.donjon||d.zone||d.custom)?`<span class="sub">${esc([d.donjon,d.zone].filter(Boolean).join(" · "))}${d.custom?" (ajouté par toi)":""}</span>`:""}</td>
+        <td>${d.pos?`<button class="posbtn" data-act="copy" data-v="[${esc(d.pos)}]">[${esc(d.pos)}]</button>`:`<span class="sub">${esc(d.zone||"—")}</span>`}</td>
+        <td><button class="pill st-${s.etat||"afaire"}" data-act="dj-cycle" data-k="${esc(d.boss)}">${lbl[s.etat||""]}</button></td>
+        <td class="runs"><button class="icon-btn" data-act="dj-run" data-d="-1" data-k="${esc(d.boss)}" aria-label="Retirer un passage">−</button><span>${s.runs||0}</span><button class="icon-btn" data-act="dj-run" data-d="1" data-k="${esc(d.boss)}" aria-label="Ajouter un passage">+</button></td>
+        <td><input type="text" data-djnote="${esc(d.boss)}" value="${esc(s.note)}" placeholder="—" aria-label="Note pour ${esc(d.boss)}"></td>
+        <td>${d.url?`<a class="guide-link" href="${d.url}" target="_blank" rel="noopener" aria-label="Guide du donjon ${esc(d.donjon)}">Ouvrir</a>`:""}</td>
+      </tr>`; }).join("") : `<tr><td colspan="7" class="empty">Aucun donjon ne correspond à ces filtres.</td></tr>`}
+    </tbody></table></div>
+    <p class="note">Niveaux, positions et guides d'après la <a href="${DPLN}donjons.html" target="_blank" rel="noopener">liste des donjons de Dofus pour les Noobs</a> (donjons retirés du jeu exclus). Le liseré doré marque ta tranche (±10 niveaux). Le lien « Ouvrir » mène au guide du donjon : salles, sorts du boss et succès.</p>
+  </section>
+  <section class="card" style="margin-top:16px"><h2>Ajouter un donjon manquant</h2>
+    <form class="form f5" data-form="donjon">
+      <label class="f">Niveau<input type="number" id="d-lvl" name="lvl" min="1" max="200" required></label>
+      <label class="f">Boss<input type="text" id="d-boss" name="boss" required></label>
+      <label class="f">Position<input type="text" id="d-pos" name="pos" placeholder="x,y"></label>
+      <label class="f">Zone<input type="text" id="d-zone" name="zone"></label>
+      <button class="btn primary" type="submit">Ajouter</button>
+    </form>
+  </section>`;
+}
+
+function vStuff(){
+  const sl = state.stuff.slots, solde = soldeKamas(), achat = stuffAcheter(), reste = solde - achat, c = state.stuff.caracs;
+  const deja = sl.filter(s => s.statut === "achete" || s.statut === "equipe").length;
+  return head("Stuff", "Planificateur d'équipement", "Note ce que tu portes, ce que tu vises et son prix à l'hôtel des ventes. Le bouton « Acheter » enregistre la dépense dans tes kamas.",
+    `<div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="https://huzounet.fr/equipments" target="_blank" rel="noopener">Stuffs Huzounet</a><a class="btn" href="https://huzounet.fr/market" target="_blank" rel="noopener">Prix HDV (Marché Huzounet)</a></div>`) + `
+  <section class="card" style="margin-bottom:16px"><h2>Pistes pour ta tranche</h2>
+    <ul class="list">
+      <li class="row"><span class="lvl">100</span><div class="grow"><div class="t">Panoplie du Dragon Cochon, trophées Remueur et Nomade</div><div class="s">Conseillés à l'étape 18 du <a href="${GUIDE_P4}" target="_blank" rel="noopener">guide Dofus pour les Noobs</a>. Les objets de la panoplie restent bons au-delà du niveau 110.</div></div></li>
+      <li class="row"><span class="lvl">XP</span><div class="grow"><div class="t">Mélange stats et Sagesse</div><div class="s">Les stuffs leveling de <a href="https://huzounet.fr/guides/xp-du-niveau-1-au-200-avec-stuff" target="_blank" rel="noopener">Huzounet</a> dosent toujours dégâts et Sagesse pour garder des combats rapides.</div></div></li>
+    </ul>
+  </section>
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card tile blue"><div class="label">Kamas disponibles</div><div class="big">${shortK(solde)}</div><div class="sub">${fmtK(solde)}</div></div>
+    <div class="card tile gold"><div class="label">Reste à acheter</div><div class="big">${shortK(achat)}</div><div class="sub">${sl.filter(s => s.statut==="acheter").length} objets · ${deja} déjà obtenus</div></div>
+    <div class="card tile ${reste<0?"warn":"ok"}"><div class="label">Après achats</div><div class="big ${reste<0?"neg":""}">${shortK(reste)}</div><div class="sub">${reste<0?"Budget dépassé : priorise ou farme avant":"Le budget tient"}</div></div>
+  </div>
+  <section class="card"><h2>Emplacements</h2>
+    <div class="table-wrap"><table><thead><tr><th>Emplacement</th><th>Porté actuellement</th><th>Objet visé</th><th>Prix HDV</th><th>Statut</th><th></th></tr></thead><tbody>
+    ${sl.map((s,i) => `<tr class="${s.statut==="equipe"?"done":""}">
+      <td><strong style="text-decoration:none">${esc(s.slot)}</strong></td>
+      <td><input type="text" id="sa-${i}" data-bind="stuff.slots.${i}.actuel" value="${esc(s.actuel)}" placeholder="—" aria-label="${esc(s.slot)} porté"></td>
+      <td><input type="text" id="sv-${i}" data-bind="stuff.slots.${i}.vise" value="${esc(s.vise)}" placeholder="—" aria-label="${esc(s.slot)} visé"></td>
+      <td style="min-width:110px"><input type="text" inputmode="numeric" id="sp-${i}" data-bind="stuff.slots.${i}.prix" data-type="k" value="${s.prix?fmt(s.prix):""}" placeholder="Ex. 250k" aria-label="Prix ${esc(s.slot)}"></td>
+      <td><select id="ss-${i}" data-bind="stuff.slots.${i}.statut" aria-label="Statut ${esc(s.slot)}">${STATUTS.map(([k,l]) => `<option value="${k}" ${k===s.statut?"selected":""}>${l}</option>`).join("")}</select></td>
+      <td>${s.statut==="acheter" && s.prix ? `<button class="btn small" data-act="buy" data-i="${i}">Acheter</button>` : ""}</td>
+    </tr>`).join("")}
+    </tbody></table></div>
+  </section>
+  <section class="card" style="margin-top:16px"><h2>Caractéristiques <small>actuel → visé</small></h2>
+    <div class="table-wrap"><table><thead><tr><th>Carac.</th><th>Actuel</th><th>Visé</th><th>Écart</th></tr></thead><tbody>
+    ${CARACS.map(([k,l]) => { const a = (c[k]||{}).a, v = (c[k]||{}).v, d = (v!=null && v!=="" && a!=null && a!=="") ? v - a : null; return `<tr>
+      <td><strong style="text-decoration:none">${l}</strong></td>
+      <td><input type="number" id="ca-${k}" data-bind="stuff.caracs.${k}.a" data-type="int" value="${a??""}" aria-label="${l} actuel"></td>
+      <td><input type="number" id="cv-${k}" data-bind="stuff.caracs.${k}.v" data-type="int" value="${v??""}" aria-label="${l} visé"></td>
+      <td class="num">${d==null?"—":d>0?`<span class="neg">−${d} à trouver</span>`:`<span class="pos">OK</span>`}</td></tr>`; }).join("")}
+    </tbody></table></div>
+    <p class="hint">Répartition des points selon <a href="https://huzounet.fr/guides/comprendre-les-caracteristiques" target="_blank" rel="noopener">Huzounet</a> : en progression, 200 points dans ton élément puis le reste en Sagesse pour l'XP ; si les combats deviennent durs, repasse en Vitalité. Monter un élément à 200 coûte 300 points, la Sagesse coûte 3 points pour 1.</p>
+  </section>`;
+}
+
+function vKamas(){
+  const k = state.kamas, solde = soldeKamas();
+  const gains = k.ops.filter(o => o.montant > 0).reduce((s,o) => s + o.montant, 0);
+  const dep = k.ops.filter(o => o.montant < 0).reduce((s,o) => s - o.montant, 0);
+  const byCat = {}; k.ops.forEach(o => { byCat[o.cat] = byCat[o.cat] || {g:0,d:0}; if (o.montant > 0) byCat[o.cat].g += o.montant; else byCat[o.cat].d -= o.montant; });
+  const cats = Object.entries(byCat).map(([c,v]) => ({c, g:v.g, d:v.d})).sort((a,b) => (b.g+b.d)-(a.g+a.d));
+  const max = Math.max(1, ...cats.map(x => Math.max(x.g, x.d)));
+  const ops = k.ops.slice().sort((a,b) => (b.date||"").localeCompare(a.date||"") || 0);
+  return head("Kamas", "Livre de comptes", "Note ce que tu gagnes et dépenses pour voir ce qui rapporte vraiment.") + `
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card tile blue"><div class="label">Solde actuel</div><div class="big">${shortK(solde)}</div><div class="sub">${fmtK(solde)}</div></div>
+    <div class="card tile ok"><div class="label">Gains enregistrés</div><div class="big pos">+${shortK(gains)}</div><div class="sub">${k.ops.filter(o=>o.montant>0).length} entrées</div></div>
+    <div class="card tile warn"><div class="label">Dépenses enregistrées</div><div class="big neg">−${shortK(dep)}</div><div class="sub">${k.ops.filter(o=>o.montant<0).length} entrées</div></div>
+  </div>
+  <section class="card"><h2>Nouvelle opération</h2>
+    <form class="form f6" data-form="op">
+      <label class="f">Date<input type="date" id="k-date" name="date" value="${today()}" required></label>
+      <label class="f">Libellé<input type="text" id="k-lib" name="libelle" placeholder="Ex. Vente de ressources Reine Nyée" required></label>
+      <label class="f">Sens<select id="k-sens" name="sens"><option value="1">Gain</option><option value="-1">Dépense</option></select></label>
+      <label class="f">Montant<input type="text" id="k-mt" name="montant" placeholder="Ex. 200k" required></label>
+      <label class="f">Catégorie<select id="k-cat" name="cat">${KCATS.map(c => `<option>${c}</option>`).join("")}</select></label>
+      <button class="btn primary" type="submit">Ajouter</button>
+    </form>
+    <p class="hint">Solde de départ : <input type="text" inputmode="numeric" id="k-dep" data-bind="kamas.depart" data-type="k" value="${fmt(k.depart)}" style="width:150px;display:inline-block" aria-label="Solde de départ"> K</p>
+  </section>
+  <div class="grid g2" style="margin-top:16px">
+    <section class="card"><h2>Par catégorie</h2>
+      ${cats.length ? `<div class="hbars">${cats.map(x => `
+        ${x.g ? `<div class="hbar"><span>${esc(x.c)} <span class="chip muted">gain</span></span><div class="track"><i style="width:${x.g/max*100}%;background:var(--ok)"></i></div><span class="v pos">+${shortK(x.g)}</span></div>` : ""}
+        ${x.d ? `<div class="hbar"><span>${esc(x.c)} <span class="chip muted">dépense</span></span><div class="track"><i class="out" style="width:${x.d/max*100}%"></i></div><span class="v neg">−${shortK(x.d)}</span></div>` : ""}`).join("")}</div>`
+      : `<p class="empty">Ajoute une première opération pour voir la répartition.</p>`}
+    </section>
+    <section class="card"><h2>Historique <small>${k.ops.length} opérations</small></h2>
+      ${ops.length ? `<ul class="list">${ops.slice(0,30).map(o => `
+        <li class="row"><div class="grow"><div class="t">${esc(o.libelle)}</div><div class="s">${esc(o.date)} · ${esc(o.cat)}</div></div>
+        <span class="num ${o.montant<0?"neg":"pos"}" style="font-weight:700">${o.montant<0?"−":"+"}${shortK(Math.abs(o.montant))}</span>
+        <button class="btn small ghost danger" data-act="op-del" data-id="${o.id}" aria-label="Supprimer">Suppr.</button></li>`).join("")}</ul>`
+      : `<p class="empty">Aucune opération. Ton solde part de ${fmtK(k.depart)}.</p>`}
+    </section>
+  </div>`;
+}
+
+function vObjectifs(){
+  const u = state.ui, f = u.objCat;
+  const list = state.objectifs.filter(o => f === "Tous" || o.cat === f);
+  const enCours = list.filter(o => !o.fait), finis = list.filter(o => o.fait);
+  const item = o => `<li class="row"><input type="checkbox" id="ob-${o.id}" data-act="obj-toggle" data-id="${o.id}" ${o.fait?"checked":""}>
+    <label class="grow" for="ob-${o.id}"><div class="t" ${o.fait?'style="text-decoration:line-through;color:var(--muted)"':""}>${esc(o.titre)}</div>${o.note?`<div class="s">${esc(o.note)}</div>`:""}</label>
+    <span class="chip ${o.cat==="Dofus"?"gold":""}">${esc(o.cat)}</span>
+    <button class="btn small ghost danger" data-act="obj-del" data-id="${o.id}" aria-label="Supprimer ${esc(o.titre)}">Suppr.</button></li>`;
+  return head("Objectifs", "Quêtes, Dofus et objectifs", "Quelques suggestions sont déjà là pour démarrer : garde-les, modifie-les ou supprime-les.") + `
+  <section class="card"><h2>Ajouter un objectif</h2>
+    <form class="form f4" data-form="obj">
+      <label class="f">Objectif<input type="text" id="ob-t" name="titre" placeholder="Ex. Finir la quête du Dofus Émeraude" required></label>
+      <label class="f">Catégorie<select id="ob-c" name="cat">${OCATS.map(c => `<option>${c}</option>`).join("")}</select></label>
+      <label class="f">Note<input type="text" id="ob-n" name="note" placeholder="Étape en cours, PNJ, position…"></label>
+      <button class="btn primary" type="submit">Ajouter</button>
+    </form>
+  </section>
+  <div class="filters" style="margin-top:16px"><div class="seg" role="group" aria-label="Filtrer par catégorie">${["Tous",...OCATS].map(c => `<button type="button" class="${f===c?"on":""}" data-act="obj-filter" data-v="${c}">${c}</button>`).join("")}</div></div>
+  <div class="grid g2">
+    <section class="card"><h2>En cours <small>${enCours.length}</small></h2>${enCours.length?`<ul class="list">${enCours.map(item).join("")}</ul>`:`<p class="empty">Rien en cours ici.</p>`}</section>
+    <section class="card"><h2>Terminés <small>${finis.length}</small></h2>${finis.length?`<ul class="list">${finis.map(item).join("")}</ul>`:`<p class="empty">Coche un objectif pour le voir ici.</p>`}</section>
+  </div>`;
+}
+
+function vNotes(){
+  const n = state.notes;
+  return head("Notes", "Carnet de jeu", "Tes notes sont enregistrées au fil de la frappe. La sauvegarde de tes données est dans Paramètres.") + `
+  <div class="grid g3">
+    <section class="card"><h2>Mon build</h2><label class="f" for="n-build" style="margin-bottom:6px">Sorts, variantes choisies, stuff</label><textarea id="n-build" data-bind="notes.build" data-live="1" placeholder="Ex. variantes choisies, stats visées…">${esc(n.build)}</textarea></section>
+    <section class="card"><h2>Combos</h2><label class="f" for="n-combos" style="margin-bottom:6px">Enchaînements qui marchent</label><textarea id="n-combos" data-bind="notes.combos" data-live="1" placeholder="Ex. ordre de sorts sur un tour…">${esc(n.combos)}</textarea></section>
+    <section class="card"><h2>Stratégies de boss</h2><label class="f" for="n-boss" style="margin-bottom:6px">Mécaniques, placements</label><textarea id="n-boss" data-bind="notes.boss" data-live="1" placeholder="Ex. Reine Nyée : …">${esc(n.boss)}</textarea></section>
+  </div>
+  <section class="card" style="margin-top:16px"><h2>Ressources utiles</h2>
+    <div class="links">
+      <a href="${GUIDE_P4}" target="_blank" rel="noopener"><b>Guide de progression Dofus 3, niv. 91–150</b><span>Dofus pour les Noobs · ton parcours actuel</span></a>
+      <a href="${DPLN}donjons.html" target="_blank" rel="noopener"><b>Tous les donjons</b><span>Dofus pour les Noobs · stratégies de boss et succès</span></a>
+      <a href="${DPLN}les-dofus.html" target="_blank" rel="noopener"><b>Les Dofus</b><span>Dofus pour les Noobs · bonus et moyen d'obtention</span></a>
+      <a href="https://huzounet.fr/equipments" target="_blank" rel="noopener"><b>Bibliothèque de stuffs</b><span>Huzounet · stuffs PvM et PvP par classe</span></a>
+      <a href="https://huzounet.fr/market" target="_blank" rel="noopener"><b>Marché</b><span>Huzounet · prix HDV communautaires</span></a>
+      <a href="https://huzounet.fr/guides/xp-du-niveau-1-au-200-avec-stuff" target="_blank" rel="noopener"><b>XP du niveau 1 à 200</b><span>Huzounet · anomalies, stuffs XP, Almanax</span></a>
+      <a href="https://huzounet.fr/guides/comprendre-les-caracteristiques" target="_blank" rel="noopener"><b>Comprendre les caractéristiques</b><span>Huzounet · points, dégâts, tacle et fuite</span></a>
+      <a href="https://huzounet.fr/monsters" target="_blank" rel="noopener"><b>Monstres et boss</b><span>Huzounet · stats et stratégies</span></a>
+    </div>
+  </section>
+`;
+}
+
+
+/* ---------- Paramètres et mises à jour ---------- */
+let desktop = false;              // vrai dans l'application Windows (Neutralino) une fois connectée
+let upd = { state:"idle", info:null, err:"" };
+function curVersion(){ return (desktop && window.NL_APPVERSION) || APP_VERSION; }
+function cmpVer(a,b){ const x = String(a).split(".").map(Number), y = String(b).split(".").map(Number); for (let i=0;i<3;i++){ const d=(x[i]||0)-(y[i]||0); if (d) return d>0?1:-1; } return 0; }
+async function checkUpdate(){
+  if (!desktop) return;
+  upd = { state:"checking", info:null, err:"" }; refreshUpd();
+  try {
+    const m = await Neutralino.updater.checkForUpdates(UPDATE_URL);
+    upd = (m && m.version && cmpVer(m.version, curVersion()) > 0) ? { state:"available", info:m, err:"" } : { state:"uptodate", info:m, err:"" };
+  } catch(e){ upd = { state:"error", info:null, err:(e && (e.message || e.code)) || "inconnue" }; }
+  refreshUpd();
+}
+async function installUpdate(){
+  if (!desktop || upd.state !== "available") return;
+  upd.state = "installing"; refreshUpd();
+  try { await Neutralino.updater.install(); upd.state = "restarting"; refreshUpd(); setTimeout(() => { Promise.resolve().then(() => Neutralino.app.restartProcess()).catch(() => { upd.state = "manual"; refreshUpd(); }); }, 600); }
+  catch(e){ upd = { state:"error", info:upd.info, err:(e && (e.message || e.code)) || "inconnue" }; refreshUpd(); }
+}
+function refreshUpd(){ renderNav(); if (current() === "parametres") render(); }
+function updPanel(){
+  if (!desktop) return `<p style="margin:0">Tu utilises la version en ligne : elle est toujours à jour, il n'y a rien à installer.</p>
+    <p class="hint">Les mises à jour depuis cet écran concernent l'application Windows (Escouade.exe).</p>`;
+  const v = upd.info && upd.info.version, notes = upd.info && upd.info.data && upd.info.data.notes;
+  const msg = {
+    idle:`<p class="hint">Clique sur le bouton pour vérifier s'il existe une nouvelle version.</p>`,
+    checking:`<p class="hint">Recherche en cours…</p>`,
+    uptodate:`<p class="pill st-fait" style="cursor:default">Escouade est à jour</p>`,
+    available:`<div class="row" style="background:var(--gold-soft);border-color:transparent;margin-top:10px"><div class="grow"><div class="t">Version ${esc(v)} disponible</div>${notes?`<div class="s" style="color:var(--ink)">${esc(notes)}</div>`:""}</div><button class="btn primary" data-act="upd-install">Installer et redémarrer</button></div>`,
+    installing:`<p class="hint">Téléchargement et installation…</p>`,
+    restarting:`<p class="hint">Mise à jour installée, redémarrage…</p>`,
+    manual:`<p class="hint">Mise à jour installée. Ferme puis relance Escouade pour l'utiliser.</p>`,
+    error:`<p class="hint neg">La vérification a échoué (${esc(upd.err)}). Vérifie ta connexion internet puis réessaie.</p>`
+  }[upd.state];
+  return `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn" data-act="upd-check" ${["checking","installing","restarting","manual"].includes(upd.state)?"disabled":""}>Rechercher une mise à jour</button>
+      <label class="check"><input type="checkbox" id="set-auto" data-bind="settings.autoUpdate" data-type="bool" ${state.settings.autoUpdate?"checked":""}> Vérifier au démarrage</label>
+    </div>${msg}`;
+}
+function vParametres(){
+  return head("Paramètres", "Paramètres", "Version de l'application, mises à jour et sauvegarde de tes données.") + `
+  <div class="grid g2">
+    <section class="card tile blue"><div class="label">Version installée</div><div class="big">${esc(curVersion())}</div><div class="sub">${desktop ? "Application Windows" : "Version en ligne"}</div></section>
+    <section class="card"><h2>Mises à jour</h2>${updPanel()}</section>
+  </div>
+  <section class="card" style="margin-top:16px"><h2>Sauvegarde et transfert</h2>
+    <p class="hint" style="margin-top:0">Ton carnet est enregistré sur ton compte quand c'est possible. Tu peux aussi copier toutes tes données pour les garder à part, puis les recoller ici.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="btn" data-act="export">Copier mes données</button><button class="btn" data-act="import">Importer depuis le texte ci-dessous</button>
+    <button class="btn danger" data-act="reset" id="btn-reset">Tout remettre à zéro</button></div>
+    <label class="f" for="imp">Données à importer</label><textarea id="imp" placeholder="Colle ici le texte copié avec « Copier mes données »" style="min-height:80px"></textarea>
+  </section>`;
+}
+
+/* ---------- Événements ---------- */
+const main = document.getElementById("main");
+function coerce(el, raw){
+  const t = el.dataset.type;
+  if (t === "bool") return !!el.checked;
+  if (t === "int") return raw === "" ? "" : (parseInt(raw,10) || 0);
+  if (t === "float") return parseFloat(String(raw).replace(",", ".")) || 0;
+  if (t === "k") return parseK(raw);
+  return raw;
+}
+main.addEventListener("change", e => {
+  const el = e.target;
+  if (el.dataset.djnote !== undefined) {
+    const k = el.dataset.djnote; state.donjons[k] = Object.assign(djState(k), { note: el.value }); persist(); return;
+  }
+  if (!el.dataset.bind || el.dataset.live) return;
+  let v = coerce(el, el.value);
+  if (el.dataset.bind === "perso.niveau" || el.dataset.bind === "perso.objectif") v = Math.min(200, Math.max(1, v || 1));
+  setPath(state, el.dataset.bind, v);
+  persist(); render();
+});
+main.addEventListener("input", e => {
+  const el = e.target;
+  if (!el.dataset.bind || !el.dataset.live) return;
+  setPath(state, el.dataset.bind, el.value);
+  if (el.dataset.live === "search") {
+    clearTimeout(main._q); main._q = setTimeout(() => { persist(); render(); const q = document.getElementById("dj-q"); if (q){ q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250);
+  } else { clearTimeout(main._n); main._n = setTimeout(persist, 600); }
+});
+main.addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target, d = Object.fromEntries(new FormData(f));
+  const kind = f.dataset.form;
+  if (kind === "session") {
+    const kam = parseK(d.kamas), niv = parseInt(d.niveauFin,10) || null;
+    const s = { id:uid(), date:d.date, activite:d.activite.trim(), duree:parseInt(d.duree,10)||0, niveauFin:niv, kamas:kam };
+    state.sessions.push(s);
+    if (niv && niv > state.perso.niveau) state.perso.niveau = Math.min(200, niv);
+    if (kam > 0) state.kamas.ops.push({ id:uid(), date:d.date, libelle:"Session : " + s.activite, cat:"Drops & ressources", montant:kam, from:s.id });
+    toast("Session ajoutée");
+  } else if (kind === "op") {
+    const m = parseK(d.montant);
+    if (!m) { toast("Montant invalide : écris par ex. 200k ou 1,5m"); return; }
+    state.kamas.ops.push({ id:uid(), date:d.date, libelle:d.libelle.trim(), cat:d.cat, montant: m * (+d.sens) });
+    toast("Opération ajoutée");
+  } else if (kind === "obj") {
+    state.objectifs.unshift({ id:uid(), titre:d.titre.trim(), cat:d.cat, note:d.note.trim(), fait:false });
+    toast("Objectif ajouté");
+  } else if (kind === "donjon") {
+    const boss = d.boss.trim();
+    if (allDonjons().some(x => x.boss.toLowerCase() === boss.toLowerCase())) { toast("Ce boss est déjà dans la liste"); return; }
+    state.customDonjons.push({ lvl:Math.min(200, Math.max(1, parseInt(d.lvl,10)||1)), boss, donjon:"", pos:d.pos.trim(), zone:d.zone.trim() });
+    toast("Donjon ajouté");
+  }
+  persist(); render();
+});
+main.addEventListener("click", async e => {
+  const el = e.target.closest("[data-act]"); if (!el) return;
+  const a = el.dataset.act;
+  if (a === "copy") { copyText(el.dataset.v); return; }
+  if (a === "dj-cycle" || a === "dj-done") {
+    const k = el.dataset.k, s = djState(k);
+    s.etat = a === "dj-done" ? "fait" : ({ "":"fait", fait:"succes", succes:"" }[s.etat || ""]);
+    if (a === "dj-done" && !s.runs) s.runs = 1;
+    state.donjons[k] = s;
+  }
+  else if (a === "dj-run") { const k = el.dataset.k, s = djState(k); s.runs = Math.max(0, (s.runs||0) + (+el.dataset.d)); if (s.runs > 0 && !s.etat) s.etat = "fait"; state.donjons[k] = s; }
+  else if (a === "etape") { const k = el.dataset.n; if (state.parcours[k]) delete state.parcours[k]; else state.parcours[k] = today(); }
+  else if (a === "dj-filter") state.ui.djEtat = el.dataset.v;
+  else if (a === "obj-filter") state.ui.objCat = el.dataset.v;
+  else if (a === "obj-toggle") { const o = state.objectifs.find(x => x.id === el.dataset.id); if (o) o.fait = !o.fait; }
+  else if (a === "obj-del") state.objectifs = state.objectifs.filter(x => x.id !== el.dataset.id);
+  else if (a === "sess-del") {
+    const id = el.dataset.id;
+    state.sessions = state.sessions.filter(x => x.id !== id);
+    state.kamas.ops = state.kamas.ops.filter(o => o.from !== id);
+  }
+  else if (a === "op-del") state.kamas.ops = state.kamas.ops.filter(x => x.id !== el.dataset.id);
+  else if (a === "buy") {
+    const s = state.stuff.slots[+el.dataset.i];
+    state.kamas.ops.push({ id:uid(), date:today(), libelle:"Achat : " + (s.vise || s.slot), cat:"Équipement", montant:-s.prix });
+    s.statut = "achete"; toast("Achat enregistré : −" + shortK(s.prix));
+  }
+  else if (a === "upd-check") { checkUpdate(); return; }
+  else if (a === "upd-install") { installUpdate(); return; }
+  else if (a === "export") { copyText(JSON.stringify(state)); return; }
+  else if (a === "import") {
+    const raw = document.getElementById("imp").value.trim();
+    try { const data = JSON.parse(raw); if (!data || !data.perso) throw 0; state = merge(data); toast("Données importées"); }
+    catch(err){ toast("Texte non reconnu : colle exactement ce que tu as copié"); return; }
+  }
+  else if (a === "reset") {
+    if (el.dataset.armed !== "1") { el.dataset.armed = "1"; el.textContent = "Clique encore pour confirmer"; setTimeout(() => { if (el.isConnected){ el.dataset.armed = ""; el.textContent = "Tout remettre à zéro"; } }, 4000); return; }
+    state = defaultState(); toast("Carnet remis à zéro");
+  }
+  else return;
+  persist(); render();
+});
+window.addEventListener("hashchange", () => { render(); window.scrollTo(0,0); });
+
+render();
+setSync(state.updated ? "local" : "loading");
+initCloud();
+
+/* ---------- Version bureau (Neutralino) ---------- */
+(function initDesktop(){
+  if (!window.Neutralino || !window.NL_PORT) return;
+  let tok = window.NL_TOKEN; try { tok = tok || sessionStorage.getItem("NL_TOKEN"); } catch(e) {}
+  if (!tok) return;
+  try { Neutralino.init(); } catch(e) { return; }
+  desktop = true;
+  document.addEventListener("click", e => {
+    const a = e.target.closest && e.target.closest('a[href^="http"]');
+    if (!a) return;
+    e.preventDefault();
+    try { Neutralino.os.open(a.href); } catch(err) {}
+  }, true);
+  render();
+  if (state.settings.autoUpdate) setTimeout(checkUpdate, 1500);
+})();
+</script>
+</body>
+</html>
