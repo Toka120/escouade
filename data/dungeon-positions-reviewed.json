@@ -150,5 +150,93 @@
     "source": "https://www.dofuspourlesnoobs.com/arbre-de-mort.html",
     "verified": "2026-11-13",
     "resolved": true
+  },
+  "Bworkette": {
+    "pos": "-5,10",
+    "previous": "-5,-10",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/donjon-des-bworks.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Koulosse": {
+    "pos": "-17,8",
+    "previous": "-7,8",
+    "access": "Se placer sur la case devant le Gardien Koalak avant de lui parler.",
+    "source": "https://www.dofuspourlesnoobs.com/caverne-du-koulosse.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Kanigroula": {
+    "pos": "-5,-54",
+    "previous": "-5,54",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/grotte-de-kanigroula.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Meulou": {
+    "pos": "-23,0",
+    "previous": "-24,1",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/taniere-du-meulou.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Chêne Mou": {
+    "pos": "-14,-13",
+    "previous": "-14,-43",
+    "access": "Entrée : parler à Josette Taplane.",
+    "source": "https://www.dofuspourlesnoobs.com/clairiegravere-du-checircne-mou.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Grolloum": {
+    "pos": "-52,-45",
+    "previous": "-63,-75",
+    "access": "Île de Sakaï : bateau depuis Madrestam [12,-3].",
+    "source": "https://www.dofuspourlesnoobs.com/donjon-de-la-mine-de-sakaiuml.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Papa Nowel": {
+    "pos": "-36,-89",
+    "previous": "-36,-39",
+    "access": "Prérequis : quête Sapik épique et Colégram terminée.",
+    "source": "https://www.dofuspourlesnoobs.com/caverne-de-nowel.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Père Fwetar": {
+    "pos": "-34,-89",
+    "previous": "-34,-39",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/maison-du-papa-nowel.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Vortex": {
+    "pos": "7,-7",
+    "previous": "1,1",
+    "access": "Dimension Xélorium : accès par une recherche de portail.",
+    "source": "https://www.dofuspourlesnoobs.com/oeil-de-vortex.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Maître Corbac": {
+    "pos": "-15,-62",
+    "previous": "-20,-62",
+    "access": "Entrée libre sans clef depuis le 21/01/2025 : parler à Virgil.",
+    "source": "https://www.dofuspourlesnoobs.com/bibliotheque-du-maitre-corbac.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Déchireuse": {
+    "pos": "12,2",
+    "previous": "",
+    "access": "Dimension Osavora : portail dans la Tour des Voyageurs [-22,-24].",
+    "source": "https://www.dofuspourlesnoobs.com/autel-de-la-dechireuse.html",
+    "verified": "2026-11-13",
+    "resolved": true
   }
 }

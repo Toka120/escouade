@@ -2,7 +2,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),htt
 const root=path.resolve(__dirname,'..'),src=path.join(root,'src'),results=[];
 const server=http.createServer((req,res)=>{const name=decodeURIComponent(req.url.split('?')[0]),file=path.resolve(src,'.'+(name==='/'?'/escouade.html':name));if(!file.startsWith(src+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404);res.end();return;}res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.html')?'text/html; charset=utf-8':'application/octet-stream');res.end(fs.readFileSync(file));});
 (async()=>{
- await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({executablePath:process.env.CHROME_EXECUTABLE||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
  try{const p=await browser.newPage();const errors=[],remote=[];p.on('pageerror',e=>errors.push(e.message));await p.route('https://**/*',r=>{remote.push(r.request().url());r.abort();});await p.goto(`http://127.0.0.1:${server.address().port}/#scan`);
  await p.evaluate(()=>{state.perso.nom='Personnage test';state.kamas.depart=12345;state.xp.courante=17;state.xp.prochain=90;persist();render();});
  const fixture={schema:'escouade.scan.v1',nom:'Autre personnage',at:1,values:{niveau:99,pa:9,kamas:500,xpRestante:100},resources:[{name:'Ressource test',qty:18}]};

@@ -64,6 +64,7 @@ def main():
     parser.add_argument('--out',type=pathlib.Path,default=ROOT/'dist')
     parser.add_argument('--test-port',type=int)
     parser.add_argument('--reuse-organizer',action='store_true',help='Reuse the unchanged organizer from the runtime after checking its delivery hash')
+    parser.add_argument('--reuse-capture',action='store_true',help='Reuse the unchanged capture tool from the runtime after checking its delivery hash (builds without csc.exe)')
     args = parser.parse_args()
     if not re.fullmatch(r'\d+\.\d+\.\d+',args.version):
         parser.error('Version must have major.minor.patch format')
@@ -106,8 +107,14 @@ def main():
     else:
         compiler=pathlib.Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
         subprocess.run([str(compiler),'/nologo','/target:winexe','/reference:System.Windows.Forms.dll','/reference:System.Drawing.dll','/reference:System.Core.dll','/out:'+str(out/'Organisateur Escouade.exe'),str(ROOT/'tools/Organisateur.cs')],check=True)
-    compiler=pathlib.Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
-    subprocess.run([str(compiler),'/nologo','/target:winexe','/reference:System.Windows.Forms.dll','/reference:System.Drawing.dll','/reference:System.Core.dll','/out:'+str(out/'Capture Escouade.exe'),str(ROOT/'tools/Capture.cs')],check=True)
+    if args.reuse_capture:
+        helper=args.runtime/'Capture Escouade.exe'
+        expected=json.loads((args.runtime/'SHA256SUMS.json').read_text(encoding='utf-8')).get(helper.name)
+        if not expected or hashlib.sha256(helper.read_bytes()).hexdigest()!=expected:raise ValueError('Capture tool hash does not match the trusted runtime manifest')
+        shutil.copy2(helper,out/helper.name)
+    else:
+        compiler=pathlib.Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
+        subprocess.run([str(compiler),'/nologo','/target:winexe','/reference:System.Windows.Forms.dll','/reference:System.Drawing.dll','/reference:System.Core.dll','/out:'+str(out/'Capture Escouade.exe'),str(ROOT/'tools/Capture.cs')],check=True)
     write_archive(resources,out/'resources.neu')
     assert read_archive(out/'resources.neu') == resources
     archive = args.out.resolve()/('Escouade-'+args.version+'-Windows.zip')

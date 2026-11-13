@@ -1,18 +1,18 @@
-ESCOUADE 1.5.1 — VERSION DE TEST LOCALE
+ESCOUADE 1.5.2 — VERSION DE TEST LOCALE
 
-Lancer Escouade.exe dans ce dossier. Garder resources.neu et Organisateur Escouade.exe à côté.
+Lancer Escouade.exe dans ce dossier. Garder resources.neu, Organisateur Escouade.exe et Capture Escouade.exe à côté.
 Les sources, les images et les notes de version sont rangées dans les sous-dossiers.
 
 Ce dossier contient :
-- Escouade.exe, resources.neu et Organisateur Escouade.exe : application Windows 1.5.1.
-- Escouade-1.5.1-Windows.zip : paquet portable complet.
+- Escouade.exe, resources.neu, Organisateur Escouade.exe et Capture Escouade.exe : application Windows 1.5.2.
+- Escouade-1.5.2-Windows.zip : paquet portable complet.
 - Visuels/Maquettes : les cinq propositions graphiques originales.
 - Visuels/Captures : 32 captures avec données de démonstration, dont trois widgets.
 - Visuels/Elements-interface : blason, bannière et icône extraits.
 - Sources Escouade : code et outils de construction/test.
 - Publication future : brouillon de fiche produit et préparation Microsoft Store.
 - Archives : copie de l'ancien exécutable et de ses ressources avant remplacement.
-- PATCHNOTES-1.5.1.md et resultats-tests.json : changements et 48 scénarios automatisés.
+- PATCHNOTES-1.5.2.md et resultats-tests.json : changements et 48 scénarios automatisés.
 - UTILISER-LES-WIDGETS.md : mode d'emploi des fenêtres flottantes.
 - resultats-services.json : cinq vérifications des API réelles.
 - FONCTIONNALITES-DOFUSGUIDE.md : comparaison et fonctions encore externes.
@@ -39,7 +39,7 @@ Dans Paramètres, exporter un JSON pour garder une copie indépendante ou transf
 Ne pas lancer plusieurs copies simultanées sur le même port.
 
 La version publique n'a pas été remplacée : Rechercher une mise à jour peut donc indiquer que
-la version locale 1.5.1 est déjà à jour alors que la version publique reste antérieure.
+la version locale 1.5.2 est déjà à jour alors que la version publique reste antérieure.
 
 Les prix HDV sont manuels. Les données de jeu sont des références datées ; ouvrir les guides
 pour les prérequis, les variantes et les positions indiquées comme incertaines.
@@ -52,7 +52,7 @@ d'éditeur ajoutée. Voir Publication future pour la suite.
 
 INTEGRATION 1.5.1
 Objectifs selon le niveau, suggestions sans doublon, menu regroupé, barre widget compacte.
-19 positions de donjons revues ; 10 autres restent à confirmer.
+19 positions de donjons revues en 1.4.1 ; les 10 restantes et la Déchireuse vérifiées en 1.5.2 (voir ci-dessous).
 Test réel F6/F7 réussi entre Xolmora et Pacster. Capture Windows : compilation validée, essai réel non terminé (autorisation d’accès expirée).
 
 SCAN ET IMPORT 1.5.1
@@ -62,3 +62,10 @@ Releves Xolmora contient le relevé personnel séparé des sources. Captures de 
 
 CORRECTIF 1.5.1
 Retour automatique du PNG après capture lancée depuis Escouade, messages d’annulation/erreur, protection si le personnage actif change. 10 vérifications Scan, dont retour natif simulé. Aucun contrôle du bureau pendant les tests 1.5.1. Le cycle réel Dofus/WebView2 reste à confirmer. L’application ouverte n’est pas relancée : fermer puis rouvrir Escouade quand tu es disponible.
+
+CORRECTIF 1.5.2
+Positions : les 10 donjons « à confirmer » relus dans leur guide Dofus pour les Noobs ; les guides confirment tous la valeur affichée. L'écart venait d'une liste tierce (signes inversés ou lignes décalées). Plus aucune position n'est marquée « à confirmer ».
+Déchireuse : son guide est de nouveau en ligne. Lien direct, entrée [12,2] dans la dimension Osavora, accès par le portail de la Tour des Voyageurs [-22,-24].
+Conditions d'accès utiles ajoutées : Koulosse, Chêne Mou, Mine de Sakaï, Caverne de Nowel, Vortex (recherche de portail), Maître Corbac (sans clef depuis janvier 2025).
+Filtre « Mon niveau » des donjons borné entre 1 et 200.
+Positions vérifiées dans les guides, pas en jeu. Exécutables Windows identiques à la 1.5.1 (SHA-256 contrôlés) ; seules les ressources changent. Le cycle réel Capture → Scan sur Dofus reste à confirmer.

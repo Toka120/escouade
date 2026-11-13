@@ -24,4 +24,22 @@ Les coordonnées ci-dessous reprennent l'entrée indiquée dans chaque guide dé
 | Guerre | [15,-20] | [4,-2] | Accès : Arche de Vili [15,-20], via la faille [10,-19] [Guide](https://www.dofuspourlesnoobs.com/trone-de-sang.html) |
 | Corruption | [15,-20] | [4,0] | Accès : Arche de Vili [15,-20], via la faille [10,-19] [Guide](https://www.dofuspourlesnoobs.com/arbre-de-mort.html) |
 
-Les dix autres désaccords signalés par l'audit restent à confirmer en jeu. Ils conservent la valeur de Dofus pour les Noobs et une mention d'incertitude. Le lien de la Déchireuse renvoie au catalogue, car le guide cité dans l'audit était indisponible.
+## Compléments du 13 novembre 2026 (1.5.2)
+
+Les dix désaccords restants opposaient la liste Dofus pour les Noobs à une liste tierce. Chaque guide détaillé de Dofus pour les Noobs a été relu : tous confirment la valeur déjà affichée par Escouade. Les écarts de la liste tierce correspondent à des signes inversés ou à des lignes décalées ; quand la page détaillée de cette même source était disponible (Bworks, Chêne Mou), elle donne aussi la valeur du guide. Vérification documentaire uniquement, pas en jeu.
+
+| Boss | Valeur de la liste tierce | Entrée confirmée | Accès / remarque | Source |
+|---|---|---|---|---|
+| Bworkette | [-5,-10] | [-5,10] | Village des Bworks | [Guide](https://www.dofuspourlesnoobs.com/donjon-des-bworks.html) |
+| Koulosse | [-7,8] | [-17,8] | Se placer devant le Gardien Koalak avant de lui parler | [Guide](https://www.dofuspourlesnoobs.com/caverne-du-koulosse.html) |
+| Kanigroula | [-5,54] | [-5,-54] | Dents de Pierre | [Guide](https://www.dofuspourlesnoobs.com/grotte-de-kanigroula.html) |
+| Meulou | [-24,1] | [-23,0] | Landes de Sidimote | [Guide](https://www.dofuspourlesnoobs.com/taniere-du-meulou.html) |
+| Chêne Mou | [-14,-43] | [-14,-13] | Parler à Josette Taplane | [Guide](https://www.dofuspourlesnoobs.com/clairiegravere-du-checircne-mou.html) |
+| Grolloum | [-63,-75] | [-52,-45] | Île de Sakaï, bateau depuis Madrestam [12,-3] | [Guide](https://www.dofuspourlesnoobs.com/donjon-de-la-mine-de-sakaiuml.html) |
+| Papa Nowel | [-36,-39] | [-36,-89] | Prérequis : Sapik épique et Colégram | [Guide](https://www.dofuspourlesnoobs.com/caverne-de-nowel.html) |
+| Père Fwetar | [-34,-39] | [-34,-89] | Taïga de Nowel | [Guide](https://www.dofuspourlesnoobs.com/maison-du-papa-nowel.html) |
+| Vortex | [1,1] | [7,-7] | Dimension Xélorium : recherche de portail | [Guide](https://www.dofuspourlesnoobs.com/oeil-de-vortex.html) |
+| Maître Corbac | [-20,-62] | [-15,-62] | Entrée libre sans clef depuis le 21/01/2025, parler à Virgil | [Guide](https://www.dofuspourlesnoobs.com/bibliotheque-du-maitre-corbac.html) |
+| Déchireuse | — | [12,2] | Dimension Osavora : portail de la Tour des Voyageurs [-22,-24] ; guide de nouveau disponible | [Guide](https://www.dofuspourlesnoobs.com/autel-de-la-dechireuse.html) |
+
+Plus aucune position n'est marquée « à confirmer ». En cas d'écart constaté en jeu, le signaler pour correction.

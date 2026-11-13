@@ -7,7 +7,7 @@ Relevé du 12 novembre 2026. Les index sont embarqués ; les nouvelles recherche
 - [Dofus en jeu](https://www.dofuspourlesnoobs.com/les-dofus.html) : collection de 30 références et niveaux d'équipement.
 - [Huzounet : éléments des classes](https://huzounet.fr/guides/les-elements-des-classes), [caractéristiques](https://huzounet.fr/guides/comprendre-les-caracteristiques) et [familier](https://huzounet.fr/guides/xp-son-familier-sur-dofus) : conseils et repères des outils.
 
-Les données complémentaires ont été préparées par Claude dans l'audit fourni séparément, puis réduites par `tools/import_audit.py` dans `src/content.js`. Les positions contestées sont signalées plutôt que remplacées sans vérification en jeu. Le lien indisponible de la Déchireuse renvoie à la liste des donjons. Le niveau d'une pierre d'âme est un repère de capacité : le joueur doit vérifier le monstre de plus haut niveau du groupe.
+Les données complémentaires ont été préparées par Claude dans l'audit fourni séparément, puis réduites par `tools/import_audit.py` dans `src/content.js`. Les positions contestées ont été relues dans chaque guide détaillé (19 en 1.4.1, 10 plus la Déchireuse en 1.5.2) ; voir `docs/POSITIONS-REVISEES.md`. Ces vérifications sont documentaires, pas faites en jeu. Le niveau d'une pierre d'âme est un repère de capacité : le joueur doit vérifier le monstre de plus haut niveau du groupe.
 
 ## Données des modules 1.3.0
 

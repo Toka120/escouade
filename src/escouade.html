@@ -449,7 +449,7 @@ const DONJONS_RAW = `10|Kardorim|Crypte de Kardorim|5,-1||crypte-de-kardorim
 200|Cire Momore|Caverne de Cire Momore|36,-70||caverne-de-cire-momore
 200|Gargandyas|Temple de Gargandyas|17,8||temple-de-gargandyas
 200|Vénérable Endormi|Breuil du Vénérable|6,9||breuil-du-venerable
-200|Déchireuse|Autel de la Déchireuse|12,2||autel-de-la-dechireuse`;
+200|Déchireuse|Autel de la Déchireuse|12,2|Dimension Osavora|autel-de-la-dechireuse`;
 const DPLN = "https://www.dofuspourlesnoobs.com/";
 const BASE_DONJONS = DONJONS_RAW.split("\n").map(l => {
   const [lvl, boss, donjon, pos, zone, slug] = l.split("|");
@@ -511,7 +511,7 @@ const CLASSES = {
 const TABS = [["accueil","Accueil"],["parcours","Parcours"],["progression","Progression"],["donjons","Donjons"],["dofus","Dofus"],["stuff","Stuff"],["kamas","Kamas"],["objectifs","Objectifs"],["outils","Outils"],["notes","Notes"],["parametres","Paramètres"]];
 TABS.splice(TABS.length-1,0,["catalogue","Encyclopédie"],["builds","Builds PvE / PvP"],["crafts","Crafts & ressources"],["metiers","Métiers"],["ocre","Ocre"],["succes","Succès"],["opti","OptiDonjons"],["chasses","Chasses"],["almanax","Almanax"],["groupe","Groupe"],["organisateur","Organisateur"]);
 TABS.splice(TABS.length-1,0,['scan','Scan et import']);
-const APP_VERSION = "1.5.1";
+const APP_VERSION = "1.5.2";
 const UPDATE_URL = "https://raw.githubusercontent.com/Toka120/escouade/main/update.json";
 
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
@@ -689,7 +689,7 @@ async function copyText(txt){
 function safeExternal(value){ try { const u=new URL(value); return u.protocol==='https:'?u.href:''; } catch(e){return '';} }
 function allDonjons(){ return BASE_DONJONS.concat(state.customDonjons.map(d => Object.assign({}, d,{custom:true,url:safeExternal(d.url)}))).map(d=>{
   const p=ESCOUADE_CONTENT.positions[d.boss];
-  return {...d,...(p?.resolved?{pos:p.pos}:{}),url:safeExternal(d.boss==='Déchireuse'?DPLN+'donjons.html':d.url)};
+  return {...d,...(p?.resolved?{pos:p.pos}:{}),url:safeExternal(d.url)};
 }).sort((a,b) => a.lvl - b.lvl || a.boss.localeCompare(b.boss, "fr")); }
 function djState(k){ return Object.hasOwn(state.donjons,k) ? state.donjons[k] : { etat:"", runs:0, note:"" }; }
 function soldeKamas(){ return state.kamas.depart + state.kamas.ops.reduce((s,o) => s + o.montant, 0); }
@@ -698,7 +698,7 @@ function aMonNiveau(d){ const n = state.perso.niveau; return d.lvl >= n - 10 && 
 function dungeonReference(d){
   const p=ESCOUADE_CONTENT.positions[d.boss], soul=ESCOUADE_CONTENT.souls[d.boss];
   const position=p?.resolved?`<span class="sub"><a href="${esc(safeExternal(p.source))}" target="_blank" rel="noopener">Entrée selon le guide</a> · vérifiée le ${esc(p.verified)}</span>${p.access?`<span class="sub">${esc(p.access)}</span>`:''}`:p?`<span class="sub" title="Les pages de référence donnent des coordonnées différentes">Position à confirmer${p.other?` · guide : [${esc(p.other)}]`:''}</span>`:'';
-  return `${position}${d.boss==='Déchireuse'?'<span class="sub">Guide indisponible : lien vers le catalogue des donjons.</span>':''}${soul?`<span class="sub">Pierre d'âme : capacité ${soul} (vérifie le groupe)</span>`:''}${['Sapik','Papa Nowel','Père Fwetar','Halouine'].includes(d.boss)?'<span class="chip muted">Événement saisonnier</span>':''}`;
+  return `${position}${soul?`<span class="sub">Pierre d'âme : capacité ${soul} (vérifie le groupe)</span>`:''}${['Sapik','Papa Nowel','Père Fwetar','Halouine'].includes(d.boss)?'<span class="chip muted">Événement saisonnier</span>':''}`;
 }
 function xpCalc(){
   const x = state.xp, reste = Math.max(0, (x.prochain||0) - (x.courante||0));
@@ -1062,7 +1062,7 @@ function vProgression(){
 
 function vDonjons(){
   const u = state.ui, n = state.perso.niveau, all = allDonjons(), q = (u.djQ||"").toLowerCase().trim();
-  const tranches = [["moi",`Mon niveau (${n-10}–${n+10})`],["tous","Tous"],["1-50","1–50"],["51-100","51–100"],["101-150","101–150"],["151-200","151–200"]];
+  const tranches = [["moi",`Mon niveau (${Math.max(1,n-10)}–${Math.min(200,n+10)})`],["tous","Tous"],["1-50","1–50"],["51-100","51–100"],["101-150","101–150"],["151-200","151–200"]];
   const list = all.filter(d => {
     if (u.djTranche === "moi" && !aMonNiveau(d)) return false;
     if (/^\d+-\d+$/.test(u.djTranche)) { const [a,b] = u.djTranche.split("-").map(Number); if (d.lvl < a || d.lvl > b) return false; }

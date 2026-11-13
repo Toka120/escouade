@@ -4,7 +4,7 @@ const fs=require('fs'),http=require('http'),path=require('path'),assert=require(
 const root=path.resolve(__dirname,'..'),results=[];
 const server=http.createServer((req,res)=>{const name=req.url.split('?')[0].slice(1),asset=['scan.js','guide.js','reference.js','content.js','widgets.js','widgets.css'].includes(name);res.setHeader('Content-Type',asset?(name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8'):'text/html; charset=utf-8');res.end(fs.readFileSync(path.join(root,'src',asset?name:'escouade.html')));});
 (async()=>{
- await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({executablePath:process.env.CHROME_EXECUTABLE||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
  const page=await browser.newPage();await page.route('https://fonts.**/*',r=>r.abort());await page.goto('http://127.0.0.1:'+server.address().port);
  for(const [name,url] of [
   ['Recherche équipements','https://api.dofusdu.de/dofus3/v1/fr/items/equipment/search?query=gelano'],

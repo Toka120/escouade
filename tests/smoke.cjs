@@ -10,7 +10,7 @@ const server = http.createServer((req,res) => { const name=req.url.split('?')[0]
 (async () => {
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   const url = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch({ executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe', headless:true });
+  const browser = await chromium.launch({ executablePath:process.env.CHROME_EXECUTABLE||'C:/Program Files/Google/Chrome/Application/chrome.exe', headless:true });
   async function test(name, fn, seed) {
     const context = await browser.newContext({ viewport:{width:1440,height:960}, locale:'fr-FR', timezoneId:'Europe/Paris' });
     const page = await context.newPage(); const errors=[];
@@ -346,8 +346,11 @@ const server = http.createServer((req,res) => { const name=req.url.split('?')[0]
   });
   await test('Positions vérifiées : entrée corrigée et accès à la dimension distinct',async p=>{
     const values=await p.evaluate(()=>Object.fromEntries(allDonjons().map(x=>[x.boss,{pos:x.pos,ref:dungeonReference(x)}])));
-    assert.equal(values['Blops Royaux'].pos,'-7,-43');assert.equal(values['Comte Harebourg'].pos,'-59,-88');assert.equal(values['Ombre'].pos,'5,9');assert.match(values['Ombre'].ref,/6,13/);assert.equal(values['Misère'].pos,'1,0');assert.match(values['Misère'].ref,/15,-20/);assert.match(values['Déchireuse'].ref,/Guide indisponible/);
-    assert.equal(await p.evaluate(()=>Object.values(ESCOUADE_CONTENT.positions).filter(x=>x.resolved).length),19);
+    assert.equal(values['Blops Royaux'].pos,'-7,-43');assert.equal(values['Comte Harebourg'].pos,'-59,-88');assert.equal(values['Ombre'].pos,'5,9');assert.match(values['Ombre'].ref,/6,13/);assert.equal(values['Misère'].pos,'1,0');assert.match(values['Misère'].ref,/15,-20/);assert.equal(values['Déchireuse'].pos,'12,2');assert.match(values['Déchireuse'].ref,/Osavora.*-22,-24/);assert.doesNotMatch(values['Déchireuse'].ref,/Guide indisponible/);
+    assert.equal(await p.evaluate(()=>allDonjons().find(x=>x.boss==='Déchireuse').url),'https://www.dofuspourlesnoobs.com/autel-de-la-dechireuse.html');
+    assert.equal(values['Bworkette'].pos,'-5,10');assert.equal(values['Kanigroula'].pos,'-5,-54');assert.match(values['Maître Corbac'].ref,/sans clef/);assert.match(values['Vortex'].ref,/recherche de portail/);
+    assert.equal(await p.evaluate(()=>Object.values(ESCOUADE_CONTENT.positions).filter(x=>x.resolved).length),30);
+    assert.equal(Object.values(values).filter(x=>/Position à confirmer/.test(x.ref)).length,0);
   });
   await test('Le réglage des groupes de menu importé doit contenir des booléens valides',async p=>{
     assert.equal(await p.evaluate(()=>{const d=JSON.parse(JSON.stringify(state));d.settings.navClosed={'Outils de jeu':'fermé'};return validSave(d);}),false);
