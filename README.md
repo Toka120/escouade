@@ -1,51 +1,63 @@
 # Escouade
 
-Suivi de team Dofus : parcours, donjons, stuff, kamas et objectifs.
+Application Windows de suivi de team Dofus : parcours 1–200, donjons, Dofus, stuff, kamas, objectifs, Ocre, succès, métiers, crafts, builds, Almanax, chasses, groupe, organisateur de fenêtres, scan des caractéristiques, banque d’objets et carte DofusDB. Application indépendante, non affiliée à Ankama.
 
-Ce dépôt sert de source de mises à jour pour l'application Windows **Escouade.exe** :
+Aucune donnée de joueur n’est stockée dans ce dépôt : la progression reste sur le PC de chaque utilisateur (profil WebView2 local, clé `carnet-xelor-v1`, format v3 multi-personnages).
 
-- `update.json` : version publiée et notes de version, lus par Paramètres > Rechercher une mise à jour.
-- `resources.neu` : fichiers de l'application téléchargés lors de l'installation d'une mise à jour.
+## Canal de mise à jour
 
-Aucune donnée de joueur n'est stockée ici : la progression reste sur le PC de chaque utilisateur.
+- `update.json` : version publiée et notes, lus par Paramètres > Rechercher une mise à jour.
+- `resources.neu` à la racine : paquet téléchargé lors de l’installation de cette mise à jour.
 
-## Version de travail 1.4.1
+Ces deux fichiers forment le canal public. Ils ne sont modifiés que lors d’une publication validée par Toka : une branche de travail ne les change pas.
 
-Interface bleu nuit et or, jusqu'à 8 personnages, parcours 1–200, Ocre, succès, métiers, recettes et stock, builds, Almanax, chasses, groupe local et organisateur Windows. Voir `docs/PATCHNOTES-1.3.0.md`, `docs/FONCTIONNALITES-DOFUSGUIDE.md` et `docs/sources.md`.
+## Contenu
 
-Les 22 rubriques sont détachables en widgets Windows au premier plan, avec bloc au choix et suivi de la prochaine quête. Voir `docs/PATCHNOTES-1.4.0.md` et `docs/UTILISER-LES-WIDGETS.md`. `src/widgets.js` et `src/widgets.css` gèrent leur présentation et la synchronisation locale. Garder la fenêtre principale ouverte, éventuellement réduite.
-
-`src/escouade.html`, `src/guide.js`, `src/content.js` et `src/reference.js` forment l'interface. Les données de jeu sont séparées pour permettre leur mise à jour avec leurs sources. `python tools/sync_reference.py` renouvelle les index publics DofusDB et demande un accès réseau.
+| Dossier | Rôle |
+|---|---|
+| `src/escouade.html` | interface, sauvegardes, migrations, navigation |
+| `src/guide.js`, `src/reference.js`, `src/content.js` | outils de jeu et données de référence (DofusDB, Dofus pour les Noobs, Huzounet) |
+| `src/scan.js` | Scan et import : lecture locale du panneau Caractéristiques, diagrammes, historique |
+| `src/banque.js`, `src/items.js` | banque d’objets hors ligne (niveaux 1–120) et carte DofusDB |
+| `src/widgets.js`, `src/widgets.css` | fenêtres flottantes au premier plan |
+| `src/vendor/ocr` | Tesseract.js 7.0.0 et données françaises, embarqués (aucun téléversement d’image) |
+| `tools/` | construction (`build.py`), livraison locale, outils Windows (`Organisateur.cs`, `Capture.cs`), synchronisation des données |
+| `tests/` | scénarios Playwright déterministes et vérification des services en ligne |
+| `data/` | positions de donjons relues dans les guides |
+| `docs/` | notes de version, guides d’utilisation, sources |
+| `distribution/` | brouillon de fiche produit (pas de soumission) |
 
 ## Construire sous Windows
 
-Python 3.10 ou plus, le compilateur C# .NET Framework de Windows et un dossier Escouade contenant le runtime Neutralino 6.4.0 (`Escouade.exe` + `resources.neu`) sont nécessaires à la construction :
+Python 3.10+, le compilateur C# .NET Framework de Windows et un dossier contenant le runtime Neutralino 6.4.0 (`Escouade.exe` + `resources.neu`) :
 
 ```powershell
-python tools/build.py 1.4.1 --runtime "C:\chemin\Escouade" --out dist
+python tools/build.py 1.6.0 --runtime "C:\chemin\Escouade" --out dist
 ```
 
-Le script conserve le runtime et sa bibliothèque, produit le paquet de ressources et compile `tools/Organisateur.cs`. Le ZIP final contient `Escouade.exe`, `resources.neu` et `Organisateur Escouade.exe`, à garder ensemble. La construction ne modifie pas l'installation d'origine. Les fichiers sont contrôlés par SHA-256.
+Le ZIP contient `Escouade.exe`, `resources.neu`, `Organisateur Escouade.exe` et `Capture Escouade.exe`, à garder ensemble. `--reuse-organizer` et `--reuse-capture` réutilisent les outils inchangés après contrôle SHA-256 (utile hors Windows). Le jeton Neutralino est à usage unique : seule `/js/neutralino.js` est chargée.
 
-Pour une validation isolée, ajouter `--test-port 52736 --out validation`. Ne pas utiliser le profil de validation comme sauvegarde personnelle.
+## Données
+
+```powershell
+python tools/sync_items.py --min 1 --max 120   # banque d’objets (Dofusdude, sans images ni descriptions)
+python tools/sync_reference.py                 # index DofusDB (Ocre, métiers, succès)
+python tools/import_audit.py <audit.json>      # parcours, Dofus et positions relues
+```
 
 ## Tests
 
 ```powershell
 npm install
-npm test
-npm run captures
-npm run test:services
+npm test               # scénarios de régression
+npm run test:scan      # scan : panneau Dofus 3 synthétique, chat ignoré, OCR local
+npm run test:banque    # banque d’objets et carte, sans réseau
+npm run test:services  # API réelles (Internet)
+npm run captures       # aperçus avec données de démonstration
 ```
 
-Les 48 scénarios déterministes utilisent Chrome installé sous Windows. `test:services` vérifie séparément cinq API réelles et nécessite Internet. `CHROME_EXECUTABLE` peut définir son chemin pour les captures. Les résultats et PNG vont dans `test-results`, avec des données de démonstration uniquement.
+`CHROME_EXECUTABLE` permet d’indiquer un autre Chrome que celui de Windows. Les résultats vont dans `test-results` (non versionné).
 
-## Publication ultérieure
+## Règles du projet
 
-La livraison de test ne change pas `update.json` ni le `resources.neu` public. Publier une mise à jour demandera de tester le paquet, puis de placer le nouveau `resources.neu` et son manifeste sur le canal de distribution retenu. Les textes de fiche et les points à préparer pour Microsoft Store sont dans `distribution/`. Aucun paquet Store certifié n'est inclus.
-
-## Intégration Claude 1.4.1
-
-Objectifs adaptés au niveau, menu regroupé et mise à jour par paquet complet. Voir `AGENTS.md` et `docs/PATCHNOTES-1.4.1.md`. Les 19 corrections de positions sourcées sont dans `data/dungeon-positions-reviewed.json`.
-
-Pour réutiliser l’Organisateur inchangé, ajouter `--reuse-organizer` à la construction : le fichier est contrôlé avec le manifeste SHA-256 du runtime.
+Voir `AGENTS.md` : pas de publication ni de modification de `update.json` sans accord explicite, préservation des sauvegardes et du profil `.tmp`, aucune action de jeu à la place du joueur (l’organisateur et la capture ne font que sélectionner, afficher ou photographier une fenêtre choisie), pas de visuels Ankama, captures et relevés personnels jamais versionnés.

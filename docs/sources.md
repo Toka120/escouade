@@ -22,3 +22,9 @@ Les visuels de maquette ont été générés dans cette conversation. La banniè
 ## Révision 1.4.1 du 13 novembre 2026
 
 Les 19 contradictions entre liste générale et guides détaillés ont été relues dans les introductions des guides. Les entrées indiquées par les guides sont désormais utilisées ; les accès aux dimensions restent distincts. Voir `POSITIONS-REVISEES.md` et `data/dungeon-positions-reviewed.json` pour les valeurs, liens et dates. Dix désaccords avec une autre source restent signalés comme incertains.
+
+## Données ajoutées en 1.6.0
+
+- [Dofusdude](https://api.dofusdu.de/) (`dofus3/v1/fr/items/{equipment,resources,consumables}/all`) : banque d’objets hors ligne `src/items.js`, générée par `tools/sync_items.py`. Elle contient 2 533 équipements, armes, Dofus, trophées et montures des niveaux 1 à 120, avec leurs effets affichés, panoplies, recettes, noms des ingrédients, données d’arme et conditions. Les images et descriptions ne sont pas copiées ; chaque fiche renvoie vers DofusDB.
+- [Carte DofusDB](https://dofusdb.fr/fr/tools/map) : affichée dans Escouade depuis le site DofusDB, Internet nécessaire. Escouade copie seulement des commandes `/travel x,y` que le joueur colle lui-même.
+- Scan : disposition du panneau Caractéristiques de Dofus 3 relevée sur une capture fournie par Toka, utilisée localement pour les mesures et non versionnée. Le test automatique dessine un panneau synthétique équivalent.

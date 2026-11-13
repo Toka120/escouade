@@ -2,7 +2,7 @@ let chromium; try { ({chromium}=require('playwright')); } catch(e) { ({chromium}
 const fs=require('fs'),path=require('path'),http=require('http');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'test-results/captures');
 fs.mkdirSync(out,{recursive:true});
-const server=http.createServer((req,res)=>{const name=req.url.split('?')[0].slice(1),asset=['content.js','scan.js','guide.js','reference.js','widgets.js','widgets.css'].includes(name);res.setHeader('Content-Type',asset?(name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8'):'text/html; charset=utf-8');res.end(fs.readFileSync(path.join(root,'src',asset?name:'escouade.html')));});
+const server=http.createServer((req,res)=>{const name=req.url.split('?')[0].slice(1),asset=['content.js','scan.js','banque.js','items.js','guide.js','reference.js','widgets.js','widgets.css'].includes(name);res.setHeader('Content-Type',asset?(name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8'):'text/html; charset=utf-8');res.end(fs.readFileSync(path.join(root,'src',asset?name:'escouade.html')));});
 (async()=>{
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const url=`http://127.0.0.1:${server.address().port}`;
  const browser=await chromium.launch({executablePath:process.env.CHROME_EXECUTABLE||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
@@ -22,6 +22,7 @@ const server=http.createServer((req,res)=>{const name=req.url.split('?')[0].slic
   const tabs=theme==='sombre'?await page.evaluate(()=>TABS.map(t=>t[0])):['accueil','parcours','parametres','crafts','ocre'];
   for(const tab of tabs){
    await page.goto(url+'/#'+tab);await page.locator('h1').waitFor();
+   if(tab==='objets'){await page.waitForFunction(()=>window.ESCOUADE_ITEMS&&document.querySelector('[data-bank-form]'));await page.evaluate(()=>{bankUi.q='Bouftou';bankUi.detail=ESCOUADE_ITEMS.items.find(i=>i.n==='Coiffe du Bouftou')?.i||null;render();});}
    await page.evaluate(()=>{const n=document.createElement('div');n.textContent='Données de démonstration · aperçu de l’interface';Object.assign(n.style,{position:'fixed',bottom:'8px',right:'12px',font:'11px Segoe UI',padding:'4px 9px',background:'#101827',color:'#d9b45a',borderRadius:'5px',zIndex:'10000'});n.id='demo-label';document.querySelector('#demo-label')?.remove();document.body.append(n);});
    await page.screenshot({path:path.join(out,`${tab}-${theme}.png`)});
   }

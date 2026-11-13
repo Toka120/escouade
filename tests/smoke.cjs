@@ -6,7 +6,7 @@ const assert = require('assert/strict');
 const root = path.resolve(__dirname, '..');
 const results = [];
 const html = fs.readFileSync(path.join(root, 'src/escouade.html'));
-const server = http.createServer((req,res) => { const name=req.url.split('?')[0].slice(1);if(['content.js','scan.js','guide.js','reference.js','widgets.js','widgets.css'].includes(name)){res.setHeader('Content-Type',name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8');res.end(fs.readFileSync(path.join(root,'src',name)));return;} res.setHeader('Content-Type','text/html; charset=utf-8');res.end(html); });
+const server = http.createServer((req,res) => { const name=req.url.split('?')[0].slice(1);if(['content.js','scan.js','banque.js','items.js','guide.js','reference.js','widgets.js','widgets.css'].includes(name)){res.setHeader('Content-Type',name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8');res.end(fs.readFileSync(path.join(root,'src',name)));return;} res.setHeader('Content-Type','text/html; charset=utf-8');res.end(html); });
 (async () => {
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   const url = `http://127.0.0.1:${server.address().port}`;
@@ -21,7 +21,7 @@ const server = http.createServer((req,res) => { const name=req.url.split('?')[0]
     catch(e) {results.push({name,passed:false,error:e.message,errors});}
     await context.close();
   }
-  await test('Les vingt-trois rubriques démarrent sans erreur',async p=>{
+  await test('Les vingt-cinq rubriques démarrent sans erreur',async p=>{
     for(const tab of await p.evaluate(()=>TABS.map(t=>t[0]))) {
       await p.locator(`#nav a[href="#${tab}"]`).click();
       await p.locator('h1').waitFor(); assert.ok((await p.locator('#main').innerText()).length>100);
@@ -332,7 +332,7 @@ const server = http.createServer((req,res) => { const name=req.url.split('?')[0]
   await test('1.4.1 : menu repliable conservé et groupe actif toujours ouvert',async p=>{
     assert.equal(await p.locator('.nav-head').count(),2);await p.locator('[data-group="Outils de jeu"]').click();assert.equal(await p.locator('#nav a[href="#ocre"]').isVisible(),false);
     await p.reload();assert.equal(await p.locator('#nav a[href="#ocre"]').isVisible(),false);
-    await p.goto(url+'/#ocre');assert.equal(await p.locator('#nav a[href="#ocre"]').isVisible(),true);assert.equal(await p.locator('#nav a').count(),23);
+    await p.goto(url+'/#ocre');assert.equal(await p.locator('#nav a[href="#ocre"]').isVisible(),true);assert.equal(await p.locator('#nav a').count(),25);
   });
   await test('1.4.1 : paquet complet requis, URL contrôlée et installation partielle interdite',async p=>{
     await p.evaluate(async()=>{desktop=true;window.Neutralino={updater:{checkForUpdates:async()=>({version:'9.9.9',data:{requiresFullPackage:true,packageUrl:'https://github.com/Toka120/escouade/releases/test.zip'}})}};location.hash='parametres';await checkUpdate();});

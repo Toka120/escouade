@@ -1,71 +1,41 @@
-ESCOUADE 1.5.2 — VERSION DE TEST LOCALE
+ESCOUADE 1.6.0 — VERSION DE TEST LOCALE
 
 Lancer Escouade.exe dans ce dossier. Garder resources.neu, Organisateur Escouade.exe et Capture Escouade.exe à côté.
-Les sources, les images et les notes de version sont rangées dans les sous-dossiers.
+Si Escouade était ouverte pendant la livraison, la fermer puis la rouvrir.
 
 Ce dossier contient :
-- Escouade.exe, resources.neu, Organisateur Escouade.exe et Capture Escouade.exe : application Windows 1.5.2.
-- Escouade-1.5.2-Windows.zip : paquet portable complet.
-- Visuels/Maquettes : les cinq propositions graphiques originales.
-- Visuels/Captures : 32 captures avec données de démonstration, dont trois widgets.
-- Visuels/Elements-interface : blason, bannière et icône extraits.
-- Sources Escouade : code et outils de construction/test.
-- Publication future : brouillon de fiche produit et préparation Microsoft Store.
-- Archives : copie de l'ancien exécutable et de ses ressources avant remplacement.
-- PATCHNOTES-1.5.2.md et resultats-tests.json : changements et 48 scénarios automatisés.
-- UTILISER-LES-WIDGETS.md : mode d'emploi des fenêtres flottantes.
-- resultats-services.json : cinq vérifications des API réelles.
-- FONCTIONNALITES-DOFUSGUIDE.md : comparaison et fonctions encore externes.
+- Escouade.exe, resources.neu, Organisateur Escouade.exe, Capture Escouade.exe : application Windows 1.6.0.
+- Escouade-1.6.0-Windows.zip : paquet portable complet.
+- PATCHNOTES-1.6.0.md : changements et tests réellement effectués.
+- UTILISER-LE-SCAN.md : lire le panneau Caractéristiques de Dofus.
+- resultats-tests.json, resultats-scan.json, resultats-banque.json, resultats-services.json : vérifications automatiques.
+- Sources Escouade : code, outils de construction et tests (aussi sur GitHub, branche dev/1.6.0).
+- Visuels : maquettes, captures de démonstration, éléments d'interface.
+- Archives : anciens exécutables, ressources et paquets, conservés avant chaque remplacement.
+- Publication future : brouillon de fiche produit (rien n'est soumis).
 
-NOUVEAUTÉS 1.5.1
-Toutes les rubriques proposent Épingler en widget : page entière ou bloc au choix.
-Dans Parcours, choisir Prochaine étape de quête pour avancer au fil des cases cochées.
-Les widgets restent au premier plan et partagent la sauvegarde et le personnage actif.
-Garder Escouade ouverte, éventuellement réduite ; utiliser Dofus fenêtré ou sans bordure.
-
-MODULES 1.3.0 CONSERVÉS
-Ocre, succès, métiers, encyclopédie, builds, recettes, stock partagé, Almanax, chasses,
-préparation des donjons, annonces de groupe locales et organisateur Windows.
-Encyclopédie : chercher un objet, ouvrir sa recette puis l'ajouter aux crafts.
-Crafts : saisir le stock et les prix ; les besoins communs sont regroupés.
-Organisateur : actualiser les clients Dofus et activer volontairement F6/F7.
-Fermer cet outil libère ses raccourcis. Aucun geste de jeu n'est exécuté.
-Les annonces restent locales ; la connexion Discord est prévue pour plus tard.
+NOUVEAUTÉS 1.6.0
+Scan et import : Escouade trouve seul le panneau Caractéristiques dans la capture et ignore le chat,
+les quêtes et la carte. Toutes les valeurs du panneau sont lues : niveau, PV, Force, Intelligence,
+Chance, Agilité, Sagesse, PA, PM, portée, critique, puissance, invocations, pods, prospection, tacle,
+fuite, retraits, esquives, initiative, soins, renvoi, et le tableau dommages / résistances / résistances %
+de chaque élément, critiques, poussée, sorts, armes, distance, mêlée. Vérifier puis enregistrer.
+Diagrammes : radar des caractéristiques, barres par élément, évolution d'un relevé à l'autre.
+Banque d'objets : 2 533 équipements, armes, Dofus, trophées et montures du niveau 1 au 120, hors ligne,
+avec effets, panoplies, recettes ; ajout aux crafts et « viser » dans le Stuff en un clic.
+Carte DofusDB : carte interactive dans Escouade (Internet nécessaire), commande /travel à copier
+et donjons de ton niveau.
+Positions de donjons : toutes relues dans les guides Dofus pour les Noobs ; plus aucune « à confirmer ».
 
 SAUVEGARDES
 Les profils WebView2 existants dans .tmp sont conservés. Ne pas supprimer .tmp.
-Une sauvegarde 1.1 est convertie au premier chargement ; sa copie d'origine est conservée.
-Dans Paramètres, exporter un JSON pour garder une copie indépendante ou transférer les données.
-Ne pas lancer plusieurs copies simultanées sur le même port.
+Dans Paramètres, exporter un JSON pour garder une copie indépendante. Ne pas lancer deux Escouade en même temps.
+Les relevés et captures personnels (Releves Xolmora, Captures de scan) restent sur ce PC et ne sont jamais publiés.
 
-La version publique n'a pas été remplacée : Rechercher une mise à jour peut donc indiquer que
-la version locale 1.5.2 est déjà à jour alors que la version publique reste antérieure.
-
-Les prix HDV sont manuels. Les données de jeu sont des références datées ; ouvrir les guides
-pour les prérequis, les variantes et les positions indiquées comme incertaines.
-Les recherches d'objets, nouvelles recettes, calendrier et indices nécessitent Internet.
-Les fournisseurs reçoivent les termes, dates et coordonnées recherchés, mais pas la sauvegarde.
-Les guides complets, itinéraires et catalogues éditoriaux restent accessibles sur les sites sources.
-
-Le paquet n'est pas encore une version Microsoft Store : pas de MSIX certifié ni de signature
-d'éditeur ajoutée. Voir Publication future pour la suite.
-
-INTEGRATION 1.5.1
-Objectifs selon le niveau, suggestions sans doublon, menu regroupé, barre widget compacte.
-19 positions de donjons revues en 1.4.1 ; les 10 restantes et la Déchireuse vérifiées en 1.5.2 (voir ci-dessous).
-Test réel F6/F7 réussi entre Xolmora et Pacster. Capture Windows : compilation validée, essai réel non terminé (autorisation d’accès expirée).
-
-SCAN ET IMPORT 1.5.1
-Ouvrir Scan et import. Capturer une fenêtre Dofus (outil Capture Escouade.exe), puis attendre le retour automatique de l’image dans Escouade. Si l’outil est lancé séparément, importer le PNG ou Ctrl+V hors d’un champ texte. Sélectionner la zone utile avec la souris puis Lire le texte localement. Le moteur français est embarqué et ne téléverse pas les images. Vérifier/corriger les valeurs avant Enregistrer. Les libellés « Force : 125 » peuvent être proposés automatiquement ; les textes ambigus restent à saisir.
-Le nom doit correspondre au personnage actif. Une sauvegarde précède l’enregistrement. Le relevé conserve portefeuille, XP restante et ressources nommées sans remplacer le journal de kamas ni le stock partagé. Les icônes seules ne sont pas identifiées. Voir UTILISER-LE-SCAN.md.
-Releves Xolmora contient le relevé personnel séparé des sources. Captures de scan contient les PNG privés, à ne pas joindre aux publications.
-
-CORRECTIF 1.5.1
-Retour automatique du PNG après capture lancée depuis Escouade, messages d’annulation/erreur, protection si le personnage actif change. 10 vérifications Scan, dont retour natif simulé. Aucun contrôle du bureau pendant les tests 1.5.1. Le cycle réel Dofus/WebView2 reste à confirmer. L’application ouverte n’est pas relancée : fermer puis rouvrir Escouade quand tu es disponible.
-
-CORRECTIF 1.5.2
-Positions : les 10 donjons « à confirmer » relus dans leur guide Dofus pour les Noobs ; les guides confirment tous la valeur affichée. L'écart venait d'une liste tierce (signes inversés ou lignes décalées). Plus aucune position n'est marquée « à confirmer ».
-Déchireuse : son guide est de nouveau en ligne. Lien direct, entrée [12,2] dans la dimension Osavora, accès par le portail de la Tour des Voyageurs [-22,-24].
-Conditions d'accès utiles ajoutées : Koulosse, Chêne Mou, Mine de Sakaï, Caverne de Nowel, Vortex (recherche de portail), Maître Corbac (sans clef depuis janvier 2025).
-Filtre « Mon niveau » des donjons borné entre 1 et 200.
-Positions vérifiées dans les guides, pas en jeu. Exécutables Windows identiques à la 1.5.1 (SHA-256 contrôlés) ; seules les ressources changent. Le cycle réel Capture → Scan sur Dofus reste à confirmer.
+LIMITES
+La lecture du scan est très fiable sur le panneau Caractéristiques de Dofus 3 mais doit toujours être vérifiée.
+Les positions sont vérifiées dans les guides, pas en jeu. Les prix HDV sont manuels.
+La carte DofusDB, les recherches en ligne, l'Almanax et les indices de chasse nécessitent Internet.
+Escouade n'effectue aucune action de jeu : l'organisateur et la capture ne font que choisir, afficher ou photographier une fenêtre.
+La version publique n'a pas été remplacée : « Rechercher une mise à jour » peut afficher une version plus ancienne.
+Application indépendante, non affiliée à Ankama.

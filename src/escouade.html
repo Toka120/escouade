@@ -6,6 +6,7 @@
 <script src="reference.js"></script>
 <script src="guide.js"></script>
 <script src="scan.js"></script>
+<script src="banque.js"></script>
 <script src="widgets.js"></script>
 <link rel="stylesheet" href="widgets.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -510,8 +511,8 @@ const CLASSES = {
 };
 const TABS = [["accueil","Accueil"],["parcours","Parcours"],["progression","Progression"],["donjons","Donjons"],["dofus","Dofus"],["stuff","Stuff"],["kamas","Kamas"],["objectifs","Objectifs"],["outils","Outils"],["notes","Notes"],["parametres","Paramètres"]];
 TABS.splice(TABS.length-1,0,["catalogue","Encyclopédie"],["builds","Builds PvE / PvP"],["crafts","Crafts & ressources"],["metiers","Métiers"],["ocre","Ocre"],["succes","Succès"],["opti","OptiDonjons"],["chasses","Chasses"],["almanax","Almanax"],["groupe","Groupe"],["organisateur","Organisateur"]);
-TABS.splice(TABS.length-1,0,['scan','Scan et import']);
-const APP_VERSION = "1.5.2";
+TABS.splice(TABS.length-1,0,['scan','Scan et import'],['objets','Banque d’objets'],['carte','Carte DofusDB']);
+const APP_VERSION = "1.6.0";
 const UPDATE_URL = "https://raw.githubusercontent.com/Toka120/escouade/main/update.json";
 
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
@@ -790,6 +791,8 @@ async function initCloud(){
 function current(){ const h = location.hash.slice(1).split('~')[0]; return TABS.some(t => t[0] === h) ? h : "accueil"; }
 const ICONS = {
   catalogue:'<path d="M4 4h6a3 3 0 012 2 3 3 0 012-2h6v15h-6a3 3 0 00-2 2 3 3 0 00-2-2H4zM12 6v15"/>',
+  objets:'<path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/>',
+  carte:'<path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   builds:'<path d="M12 3l8 4v6c0 4-8 8-8 8s-8-4-8-8V7zM8 12l3 3 5-6"/>',
   crafts:'<path d="M3 21l9-9M9 4l4-2 9 9-2 4-4-1-6-6zM14 16l5 5 2-2-5-5"/>',
   metiers:'<path d="M4 5l15 15M3 12C3 6 9 2 15 3M8 3l4 5"/>',
@@ -817,7 +820,7 @@ const icon = (k, sz) => `<svg width="${sz||20}" height="${sz||20}" viewBox="0 0 
 // Menu regroupé : les rubriques de suivi d'abord, les outils ensuite. Un groupe peut être replié ;
 // celui de la rubrique affichée reste toujours ouvert.
 const NAV_GROUPS = [["Suivi", ["accueil","parcours","progression","donjons","dofus","stuff","kamas","objectifs","notes"]],
-  ["Outils de jeu", ["outils","catalogue","builds","crafts","metiers","ocre","succes","opti","chasses","almanax","groupe","organisateur"]],
+  ["Outils de jeu", ["outils","catalogue","objets","carte","builds","crafts","metiers","ocre","succes","opti","chasses","almanax","groupe","organisateur"]],
   ["", ["parametres"]]];
 function renderNav(){
   const c = current();
@@ -860,7 +863,7 @@ function render(){
   applyTheme();
   renderNav();
   const v = current();
-  const fn = { parametres:vParametres, accueil:vAccueil, parcours:vParcours, progression:vProgression, donjons:vDonjons, dofus:vDofus, outils:vOutils, stuff:vStuff, kamas:vKamas, objectifs:vObjectifs, notes:vNotes, ocre:vOcre, succes:vSucces, metiers:vMetiers, catalogue:vCatalogue, crafts:vCrafts, builds:vBuilds, almanax:vAlmanax, opti:vOpti, chasses:vChasses, groupe:vGroupe, organisateur:vOrganisateur, scan:vScan }[v];
+  const fn = { parametres:vParametres, accueil:vAccueil, parcours:vParcours, progression:vProgression, donjons:vDonjons, dofus:vDofus, outils:vOutils, stuff:vStuff, kamas:vKamas, objectifs:vObjectifs, notes:vNotes, ocre:vOcre, succes:vSucces, metiers:vMetiers, catalogue:vCatalogue, crafts:vCrafts, builds:vBuilds, almanax:vAlmanax, opti:vOpti, chasses:vChasses, groupe:vGroupe, organisateur:vOrganisateur, scan:vScan, objets:vObjets, carte:vCarte }[v];
   const main = document.getElementById("main");
   const y = window.scrollY;
   main.innerHTML = (loadNotice ? `<section class="card" role="alert" style="border-color:var(--bad);margin-bottom:16px"><p>${esc(loadNotice)}</p><a class="btn" href="#parametres">Options de récupération</a></section>` : '') + fn();
@@ -1625,6 +1628,7 @@ document.addEventListener("change", e => { if (e.target.id === "perso-switch") {
 
 installGuideEvents();
 installScanEvents();
+installBankEvents();
 installWidgetEvents();
 if(!location.hash && TABS.some(t=>t[0]===state.settings.startPage)) history.replaceState(null,'','#'+state.settings.startPage);
 render();

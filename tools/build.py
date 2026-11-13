@@ -90,7 +90,7 @@ def main():
     # bridge. Never request the parent's one-time-token client script again.
     resources['resources/widget.html'] = source.replace('<script src="/js/neutralino.js"></script>','').encode('utf-8')
     resources['resources/content.js'] = (ROOT/'src/content.js').read_bytes()
-    for name in ['guide.js','scan.js','reference.js','widgets.js','widgets.css']:
+    for name in ['guide.js','scan.js','banque.js','items.js','reference.js','widgets.js','widgets.css']:
         resources['resources/'+name]=(ROOT/'src'/name).read_bytes()
     for file in (ROOT/'src/vendor/ocr').rglob('*'):
         if file.is_file():resources['resources/'+file.relative_to(ROOT/'src').as_posix()]=file.read_bytes()

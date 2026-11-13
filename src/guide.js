@@ -4,7 +4,7 @@ function workshopDefaults(){return {crafts:[],stock:{},prices:{},builds:[],group
 function validGuide(g){
   if(g===undefined)return true;
   const obj=x=>x&&typeof x==='object'&&!Array.isArray(x), count=x=>Number.isSafeInteger(x)&&x>=0&&x<=1e9;
-  return obj(g)&&validScan(g.scan)&&['ocre','jobs'].every(k=>g[k]===undefined||(obj(g[k])&&Object.values(g[k]).every(x=>count(x)&&(k!=='jobs'||(x>=1&&x<=200)))))&&
+  return obj(g)&&validScan(g.scan)&&validScanHistory(g.scanHistory)&&['ocre','jobs'].every(k=>g[k]===undefined||(obj(g[k])&&Object.values(g[k]).every(x=>count(x)&&(k!=='jobs'||(x>=1&&x<=200)))))&&
     ['achievements','pins','almanax'].every(k=>g[k]===undefined||(obj(g[k])&&Object.values(g[k]).every(x=>typeof x==='boolean')))&&
     (g.hunts===undefined||(Array.isArray(g.hunts)&&g.hunts.length<=1000&&g.hunts.every(x=>obj(x)&&typeof x.clue==='string'&&x.clue.length<=500&&['N','S','E','W'].includes(x.dir)&&['x','y','toX','toY'].every(k=>Number.isInteger(x[k])&&Math.abs(x[k])<=200))));
 }

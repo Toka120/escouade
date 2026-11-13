@@ -1,13 +1,15 @@
 {
   "name": "escouade",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "private": true,
   "scripts": {
     "test": "node tests/smoke.cjs",
     "captures": "node tests/capture.cjs",
     "test:services": "node tests/services.cjs",
     "test:scan": "node tests/scan.cjs",
-    "prepare:ocr": "node tools/prepare-ocr.cjs"
+    "prepare:ocr": "node tools/prepare-ocr.cjs",
+    "test:banque": "node tests/banque.cjs",
+    "sync:items": "python tools/sync_items.py --min 1 --max 120"
   },
   "devDependencies": {
     "playwright": "1.65.0"
