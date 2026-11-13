@@ -1,0 +1,19 @@
+{
+  "name": "escouade",
+  "version": "1.5.1",
+  "private": true,
+  "scripts": {
+    "test": "node tests/smoke.cjs",
+    "captures": "node tests/capture.cjs",
+    "test:services": "node tests/services.cjs",
+    "test:scan": "node tests/scan.cjs",
+    "prepare:ocr": "node tools/prepare-ocr.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.65.0"
+  },
+  "dependencies": {
+    "@tesseract.js-data/fra": "1.0.0",
+    "tesseract.js": "7.0.0"
+  }
+}

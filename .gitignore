@@ -1,0 +1,10 @@
+dist/
+validation/
+validation-*/
+test-results/
+__pycache__/
+node_modules/
+.tmp/
+review-*/
+Captures de scan/
+Releves Xolmora/

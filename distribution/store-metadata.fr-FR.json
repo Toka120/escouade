@@ -1,0 +1,33 @@
+{
+  "status": "brouillon non soumis",
+  "name": "Escouade",
+  "language": "fr-FR",
+  "version": "1.5.1",
+  "shortDescription": "Organisez votre team Dofus : personnages, parcours, donjons, Dofus, équipement et kamas.",
+  "description": "Escouade est un carnet de progression communautaire pour organiser une équipe de joueurs de Dofus. Suivez jusqu’à huit personnages, préparez votre parcours du niveau 1 à 200, cochez vos donjons et votre collection de Dofus. Planifiez votre équipement et vos dépenses, gardez vos notes et mesurez vos objectifs. Les données de la version Windows restent sur votre PC et peuvent être exportées ou importées au format JSON. Les liens vers Huzounet et Dofus pour les Noobs permettent de consulter les guides détaillés. Application indépendante, non officielle et non affiliée à Ankama.",
+  "features": [
+    "Jusqu’à 8 personnages configurables",
+    "Parcours du niveau 1 à 200",
+    "Suivi des donjons et des Dofus",
+    "Budget de team et équipement",
+    "Objectifs chiffrés et notes",
+    "Thèmes sombre, clair et système",
+    "Import et export JSON"
+  ],
+  "whatsNew": "Retour automatique de l’image après capture, messages d’annulation et d’erreur. OCR français local et relevés vérifiés. Validation native sur client réel encore à terminer. Version locale de test.",
+  "publisher": null,
+  "supportUrl": null,
+  "privacyPolicyUrl": null,
+  "websiteUrl": null,
+  "category": "à choisir dans Partner Center",
+  "ageRating": "à compléter dans le questionnaire officiel",
+  "packaging": "version portable de test ; MSIX ou installateur signé à préparer",
+  "screenshotsDirectory": "../Visuels/Captures",
+  "keywords": [
+    "Dofus",
+    "équipe",
+    "progression",
+    "donjons",
+    "carnet"
+  ]
+}

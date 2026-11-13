@@ -1,0 +1,154 @@
+{
+  "Corailleur Magistral": {
+    "pos": "-59,14",
+    "previous": "-59,15",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/grotte-hesque.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Blops Royaux": {
+    "pos": "-7,-43",
+    "previous": "-25,-17",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/clos-des-blops.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Rat Blanc": {
+    "pos": "-34,-59",
+    "previous": "-36,-60",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/garde-manger-du-rat-blanc.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Rat Noir": {
+    "pos": "-28,37",
+    "previous": "-29,35",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/sousouriciere-du-rat-noir.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Minotot": {
+    "pos": "-42,-17",
+    "previous": "-37,-11",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/minotot.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "XLII": {
+    "pos": "7,-2",
+    "previous": "7,3",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/horologium-de-xlii.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Père Ver": {
+    "pos": "7,-70",
+    "previous": "-7,-70",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/boyau-du-pere-ver.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Ougah": {
+    "pos": "-9,29",
+    "previous": "-18,28",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/temple-du-grand-ougah.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Ombre": {
+    "pos": "5,9",
+    "previous": "6,13",
+    "access": "Accès à la Dimension Obscure : [6,13]",
+    "source": "https://www.dofuspourlesnoobs.com/pyramide-dombre.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Comte Harebourg": {
+    "pos": "-59,-88",
+    "previous": "-61,-79",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/donjon-du-comte-harebourg.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Missiz Frizz": {
+    "pos": "-71,-88",
+    "previous": "-70,-81",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/forgefroide-de-missiz-frizz.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Nileza": {
+    "pos": "-59,-74",
+    "previous": "-61,-74",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/laboratoire-de-nileza.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Klime": {
+    "pos": "-63,-93",
+    "previous": "-63,-86",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/salons-priveacutes-de-klime.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Sylargh": {
+    "pos": "-52,-87",
+    "previous": "-53,-84",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/transporteur-de-sylargh.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Ilyzaelle": {
+    "pos": "-73,-76",
+    "previous": "-72,-77",
+    "access": "",
+    "source": "https://www.dofuspourlesnoobs.com/belvedere-d-ilyzaelle.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Misère": {
+    "pos": "1,0",
+    "previous": "15,-20",
+    "access": "Accès : Arche de Vili [15,-20], via la faille [10,-19]",
+    "source": "https://www.dofuspourlesnoobs.com/sentence-de-la-balance.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Servitude": {
+    "pos": "4,-3",
+    "previous": "15,-20",
+    "access": "Accès : Arche de Vili [15,-20], via la faille [10,-19]",
+    "source": "https://www.dofuspourlesnoobs.com/fers-de-la-tyrannie.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Guerre": {
+    "pos": "4,-2",
+    "previous": "15,-20",
+    "access": "Accès : Arche de Vili [15,-20], via la faille [10,-19]",
+    "source": "https://www.dofuspourlesnoobs.com/trone-de-sang.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  },
+  "Corruption": {
+    "pos": "4,0",
+    "previous": "15,-20",
+    "access": "Accès : Arche de Vili [15,-20], via la faille [10,-19]",
+    "source": "https://www.dofuspourlesnoobs.com/arbre-de-mort.html",
+    "verified": "2026-11-13",
+    "resolved": true
+  }
+}
