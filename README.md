@@ -1,6 +1,6 @@
 # Escouade
 
-Application Windows de suivi de team Dofus : parcours 1–200, donjons, Dofus, stuff, kamas, objectifs, Ocre, succès, métiers, crafts, builds, Almanax, chasses, groupe, organisateur de fenêtres, scan des caractéristiques, catalogue Dofus hors ligne (17 402 objets) et carte DofusDB. Application indépendante, non affiliée à Ankama.
+Application Windows de suivi de team Dofus : parcours 1–200, donjons, Dofus, stuff, kamas, objectifs, Ocre, succès, métiers, crafts, builds, Almanax, chasses, groupe, organisateur de fenêtres, scan des caractéristiques, encyclopédie hors ligne (17 402 objets, filtres façon hôtel des ventes) et carte DofusDB. Application indépendante, non affiliée à Ankama.
 
 Aucune donnée de joueur n’est stockée dans ce dépôt : la progression reste sur le PC de chaque utilisateur (profil WebView2 local, clé `carnet-xelor-v1`, format v3 multi-personnages).
 
@@ -32,7 +32,7 @@ Ces deux fichiers forment le canal public. Ils ne sont modifiés que lors d’un
 Python 3.10+, le compilateur C# .NET Framework de Windows et un dossier contenant le runtime Neutralino 6.4.0 (`Escouade.exe` + `resources.neu`) :
 
 ```powershell
-python tools/build.py 1.6.1 --runtime "C:\chemin\Escouade" --out dist
+python tools/build.py 1.6.2 --runtime "C:\chemin\Escouade" --out dist
 ```
 
 Le ZIP contient `Escouade.exe`, `resources.neu`, `Organisateur Escouade.exe` et `Capture Escouade.exe`, à garder ensemble. `--reuse-organizer` et `--reuse-capture` réutilisent les outils inchangés après contrôle SHA-256 (utile hors Windows). Le jeton Neutralino est à usage unique : seule `/js/neutralino.js` est chargée.

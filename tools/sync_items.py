@@ -7,10 +7,11 @@ Directly from the public Dofusdude API:
 
 Kept: names, categories, types, levels, pods, effects as displayed in game, weapon
 figures, conditions, recipes (by item id), sets with their bonuses, mount species.
-Not kept: images and lore descriptions (Ankama assets/texts), which stay on
-DofusDB / Dofusdude. JSON is treated as data only.
+Not kept: images and lore descriptions. Only the numeric icon id is stored ('g'):
+the app may display the icon from the Dofusdude image server when online, it is
+never bundled. JSON is treated as data only.
 """
-import argparse, datetime, hashlib, json, pathlib, urllib.request
+import argparse, datetime, hashlib, json, pathlib, re, urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 API = 'https://api.dofusdu.de/dofus3/v1/'
@@ -56,6 +57,9 @@ def main():
     def idx(lst, v):
         if v not in lst: lst.append(v)
         return lst.index(v)
+    def icon(it):
+        m = re.search(r'/img/item/(\d+)-\d+\.png$', (it.get('image_urls') or {}).get('icon', '') or '')
+        return int(m.group(1)) if m else None
     def effects_of(raw):
         out = []
         for e in raw or []:
@@ -67,6 +71,8 @@ def main():
         for it in load(kind)['items']:
             if not it or not it.get('name'): continue
             row = {'i': it['ankama_id'], 'n': it['name'], 'c': ci, 't': idx(types_index, (it.get('type') or {}).get('name') or 'Divers'), 'l': it.get('level', 0), 'p': it.get('pods', 0)}
+            g = icon(it)
+            if g: row['g'] = g
             e = effects_of(it.get('effects'))
             if e: row['e'] = e
             rec = [[r['item_ankama_id'], r['quantity']] for r in it.get('recipe') or []]
@@ -82,14 +88,14 @@ def main():
     for s in load('sets')['sets']:
         bonus = {n: [e['formatted'] for e in (lst or []) if e.get('formatted')] for n, lst in (s.get('effects') or {}).items()}
         sets[s['ankama_id']] = {'n': s['name'], 'l': s.get('level', 0), 'q': s.get('items', 0), 'b': {n: v for n, v in bonus.items() if v}}
-    mounts = [{'i': m['ankama_id'], 'n': m['name'], 'f': (m.get('family') or {}).get('name', ''), 'e': [e['formatted'] for e in m.get('effects') or [] if e.get('formatted')]} for m in load('mounts')['mounts'] if m.get('name')]
+    mounts = [{'i': m['ankama_id'], 'n': m['name'], 'g': icon(m), 'f': (m.get('family') or {}).get('name', ''), 'e': [e['formatted'] for e in m.get('effects') or [] if e.get('formatted')]} for m in load('mounts')['mounts'] if m.get('name')]
     ids = [x['i'] for x in items]
     assert len(ids) == len(set(ids)), 'identifiants en double entre catégories'
     data = {'updated': datetime.date.today().isoformat(), 'game': version, 'source': 'https://api.dofusdu.de/', 'categories': [c[1] for c in CATEGORIES],
             'types': types_index, 'effects': effects_index, 'sets': sets, 'mounts': mounts, 'items': items}
     out = ROOT / 'src/items.js'
     out.write_text("/* Catalogue Dofus hors ligne : " + str(len(items)) + " objets, " + str(len(sets)) + " panoplies, " + str(len(mounts)) +
-                   " montures. Source Dofusdude (données publiques du jeu " + str(version.get('version', '')) + "), sans images ni descriptions. Généré par tools/sync_items.py. */\nwindow.ESCOUADE_ITEMS = " +
+                   " montures. Source Dofusdude (données publiques du jeu " + str(version.get('version', '')) + "), sans images embarquées ni descriptions. Généré par tools/sync_items.py. */\nwindow.ESCOUADE_ITEMS = " +
                    json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf-8')
     (ROOT / 'data').mkdir(exist_ok=True)
     counts = {c[1]: sum(1 for x in items if x['c'] == i) for i, c in enumerate(CATEGORIES)}

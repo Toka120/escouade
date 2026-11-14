@@ -510,9 +510,9 @@ const CLASSES = {
   "Zobal":["Zone en mêlée, vol de vie, boost de dommages, retrait PM","Mono-cible distance et mêlée, retrait PO, désenvoûte","Repousse en ligne, mono-cible, réduit les dommages adverses","Zone à longue portée, retrait PA",2,"Terre ou Eau"]
 };
 const TABS = [["accueil","Accueil"],["parcours","Parcours"],["progression","Progression"],["donjons","Donjons"],["dofus","Dofus"],["stuff","Stuff"],["kamas","Kamas"],["objectifs","Objectifs"],["outils","Outils"],["notes","Notes"],["parametres","Paramètres"]];
-TABS.splice(TABS.length-1,0,["catalogue","Encyclopédie"],["builds","Builds PvE / PvP"],["crafts","Crafts & ressources"],["metiers","Métiers"],["ocre","Ocre"],["succes","Succès"],["opti","OptiDonjons"],["chasses","Chasses"],["almanax","Almanax"],["groupe","Groupe"],["organisateur","Organisateur"]);
-TABS.splice(TABS.length-1,0,['scan','Scan et import'],['objets','Catalogue Dofus'],['carte','Carte DofusDB']);
-const APP_VERSION = "1.6.1";
+TABS.splice(TABS.length-1,0,["catalogue","Recherche en ligne"],["builds","Builds PvE / PvP"],["crafts","Crafts & ressources"],["metiers","Métiers"],["ocre","Ocre"],["succes","Succès"],["opti","OptiDonjons"],["chasses","Chasses"],["almanax","Almanax"],["groupe","Groupe"],["organisateur","Organisateur"]);
+TABS.splice(TABS.length-1,0,['scan','Scan et import'],['objets','Encyclopédie'],['carte','Carte DofusDB']);
+const APP_VERSION = "1.6.2";
 const UPDATE_URL = "https://raw.githubusercontent.com/Toka120/escouade/main/update.json";
 
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
@@ -1435,7 +1435,7 @@ function validSave(d){
   if(!list(d.objectifs,o=>text(o.titre) && text(o.cat) && text(o.note) && text(o.unite) && num(o.cible) && num(o.avancement))) return false;
   if(!list(d.customDonjons,x=>typeof x.boss==='string' && num(x.lvl) && text(x.zone) && text(x.pos))) return false;
   if(d.notes !== undefined && (!obj(d.notes) || !['build','combos','boss'].every(k=>text(d.notes[k])))) return false;
-  if(d.settings !== undefined && (!obj(d.settings) || (d.settings.theme !== undefined && !['clair','sombre','systeme'].includes(d.settings.theme)) || (d.settings.autoUpdate !== undefined && typeof d.settings.autoUpdate!=='boolean') || (d.settings.textSize!==undefined && ![90,100,110,125].includes(d.settings.textSize)) || (d.settings.startPage!==undefined && !TABS.some(t=>t[0]===d.settings.startPage)) || (d.settings.density!==undefined && !['compact','confort'].includes(d.settings.density)) || (d.settings.reducedMotion!==undefined && typeof d.settings.reducedMotion!=='boolean'))) return false;
+  if(d.settings !== undefined && (!obj(d.settings) || (d.settings.theme !== undefined && !['clair','sombre','systeme'].includes(d.settings.theme)) || (d.settings.autoUpdate !== undefined && typeof d.settings.autoUpdate!=='boolean') || (d.settings.textSize!==undefined && ![90,100,110,125].includes(d.settings.textSize)) || (d.settings.startPage!==undefined && !TABS.some(t=>t[0]===d.settings.startPage)) || (d.settings.density!==undefined && !['compact','confort'].includes(d.settings.density)) || (d.settings.reducedMotion!==undefined && typeof d.settings.reducedMotion!=='boolean') || (d.settings.itemImages!==undefined && typeof d.settings.itemImages!=='boolean'))) return false;
   if(d.ui !== undefined && (!obj(d.ui) || !['djTranche','djEtat','djQ','objCat'].every(k=>text(d.ui[k])))) return false;
   if(d.settings?.navClosed!==undefined&&(!obj(d.settings.navClosed)||!Object.entries(d.settings.navClosed).every(([k,v])=>['Suivi','Outils de jeu'].includes(k)&&typeof v==='boolean')))return false;
   if(d.outils!==undefined && (!obj(d.outils) || !['croquettePrix','xpFamilier','statCible'].every(k=>num(d.outils[k]) && !(d.outils[k]<0)))) return false;

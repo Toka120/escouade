@@ -22,7 +22,7 @@ const server=http.createServer((req,res)=>{const name=req.url.split('?')[0].slic
   const tabs=theme==='sombre'?await page.evaluate(()=>TABS.map(t=>t[0])):['accueil','parcours','parametres','crafts','ocre'];
   for(const tab of tabs){
    await page.goto(url+'/#'+tab);await page.locator('h1').waitFor();
-   if(tab==='objets'){await page.waitForFunction(()=>window.ESCOUADE_ITEMS&&document.querySelector('[data-bank-form]'));await page.evaluate(()=>{bankUi.q='Bouftou';bankUi.detail=ESCOUADE_ITEMS.items.find(i=>i.n==='Coiffe du Bouftou')?.i||null;render();});}
+   if(tab==='objets'){await page.waitForFunction(()=>window.ESCOUADE_ITEMS&&document.querySelector('#enc-results'));await page.evaluate(()=>{bankUi.q='Bouftou';bankUi.detail=ESCOUADE_ITEMS.items.find(i=>i.n==='Coiffe du Bouftou')?.i||null;render();});}
    await page.evaluate(()=>{const n=document.createElement('div');n.textContent='Données de démonstration · aperçu de l’interface';Object.assign(n.style,{position:'fixed',bottom:'8px',right:'12px',font:'11px Segoe UI',padding:'4px 9px',background:'#101827',color:'#d9b45a',borderRadius:'5px',zIndex:'10000'});n.id='demo-label';document.querySelector('#demo-label')?.remove();document.body.append(n);});
    await page.screenshot({path:path.join(out,`${tab}-${theme}.png`)});
   }
