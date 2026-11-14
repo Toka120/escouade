@@ -1,18 +1,25 @@
-ESCOUADE 1.6.0 — VERSION DE TEST LOCALE
+ESCOUADE 1.6.1 — VERSION DE TEST LOCALE
 
 Lancer Escouade.exe dans ce dossier. Garder resources.neu, Organisateur Escouade.exe et Capture Escouade.exe à côté.
 Si Escouade était ouverte pendant la livraison, la fermer puis la rouvrir.
 
 Ce dossier contient :
-- Escouade.exe, resources.neu, Organisateur Escouade.exe, Capture Escouade.exe : application Windows 1.6.0.
-- Escouade-1.6.0-Windows.zip : paquet portable complet.
-- PATCHNOTES-1.6.0.md : changements et tests réellement effectués.
+- Escouade.exe, resources.neu, Organisateur Escouade.exe, Capture Escouade.exe : application Windows 1.6.1.
+- Escouade-1.6.1-Windows.zip : paquet portable complet.
+- PATCHNOTES-1.6.1.md et PATCHNOTES-1.6.0.md : changements et tests réellement effectués.
 - UTILISER-LE-SCAN.md : lire le panneau Caractéristiques de Dofus.
 - resultats-tests.json, resultats-scan.json, resultats-banque.json, resultats-services.json : vérifications automatiques.
-- Sources Escouade : code, outils de construction et tests (aussi sur GitHub, branche dev/1.6.0).
+- Sources Escouade : code, outils de construction et tests (aussi sur GitHub, branche dev/1.6.0, mise à jour en 1.6.1).
 - Visuels : maquettes, captures de démonstration, éléments d'interface.
 - Archives : anciens exécutables, ressources et paquets, conservés avant chaque remplacement.
 - Publication future : brouillon de fiche produit (rien n'est soumis).
+
+NOUVEAUTÉS 1.6.1
+Catalogue Dofus complet et hors ligne : 17 402 objets (équipements, ressources, consommables,
+objets de quête, cosmétiques) de tous niveaux, 941 panoplies avec leurs bonus, 308 montures.
+Un ingrédient s'ouvre dans Escouade, avec la liste des recettes où il sert.
+Scan : le nom du personnage (au-dessus de NIVEAU) et sa classe sont lus ; si un autre perso est actif,
+Escouade propose de passer sur le bon.
 
 NOUVEAUTÉS 1.6.0
 Scan et import : Escouade trouve seul le panneau Caractéristiques dans la capture et ignore le chat,
@@ -21,8 +28,7 @@ Chance, Agilité, Sagesse, PA, PM, portée, critique, puissance, invocations, po
 fuite, retraits, esquives, initiative, soins, renvoi, et le tableau dommages / résistances / résistances %
 de chaque élément, critiques, poussée, sorts, armes, distance, mêlée. Vérifier puis enregistrer.
 Diagrammes : radar des caractéristiques, barres par élément, évolution d'un relevé à l'autre.
-Banque d'objets : 2 533 équipements, armes, Dofus, trophées et montures du niveau 1 au 120, hors ligne,
-avec effets, panoplies, recettes ; ajout aux crafts et « viser » dans le Stuff en un clic.
+Catalogue d'objets : effets, panoplies, recettes ; ajout aux crafts et « viser » dans le Stuff en un clic.
 Carte DofusDB : carte interactive dans Escouade (Internet nécessaire), commande /travel à copier
 et donjons de ton niveau.
 Positions de donjons : toutes relues dans les guides Dofus pour les Noobs ; plus aucune « à confirmer ».

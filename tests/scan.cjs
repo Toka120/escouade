@@ -35,12 +35,15 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(req.url
   const dim=v=>/^(0|0 %|-)$/.test(v);rows.forEach(([l,d,r,q],i)=>{const y=525+i*22.3;label(l,467,y);right(d,623,y,dim(d)?G:W,dim(d)?'14px Arial':'bold 14px Arial');right(r,681,y,dim(r)?G:W,dim(r)?'14px Arial':'bold 14px Arial');right(q,736,y,dim(q)?G:W,dim(q)?'14px Arial':'bold 14px Arial');});
   g.font='12px Arial';g.fillStyle='#c8c8c8';g.fillText('POINTS RESTANTS',549,793);right('0',703,793);
   if(scanWorker){await scanWorker.terminate();scanWorker=null;}
-  return (await scanOCR(c.toDataURL())).values;
+  const r=await scanOCR(c.toDataURL());return {...r.values,__nom:r.nom,__classe:r.classe};
  });
+ const header={nom:panelValues.__nom,classe:panelValues.__classe};delete panelValues.__nom;delete panelValues.__classe;
+ assert.deepEqual(header,{nom:'Aventurier',classe:'Xélor'});
  const expected={pv:2095,force:125,intelligence:150,chance:125,agilite:265,sagesse:165,niveau:99,pa:9,pm:5,po:1,critique:9,puissance:369,invocations:2,pods:4867,prospection:114,tacle:26,fuite:26,retraitPA:16,retraitPM:16,esquivePA:16,esquivePM:16,initiative:665,soins:25,renvoi:0,domNeutre:38,domTerre:48,domFeu:38,domEau:45,domAir:48,pctTerre:3,pctFeu:1,pctEau:3,pctAir:6,domCritique:1,resCritique:-30,resPoussee:-30,points:0};
  const wrong=Object.entries(panelValues).filter(([k,v])=>expected[k]!==undefined&&expected[k]!==v),found=Object.keys(expected).filter(k=>panelValues[k]===expected[k]);
  assert.deepEqual(wrong,[],'valeurs fausses : '+JSON.stringify(wrong));assert.ok(found.length>=Object.keys(expected).length-3,'valeurs lues : '+found.length+'/'+Object.keys(expected).length+' '+JSON.stringify(panelValues));
  for(const[k,bad]of Object.entries({force:999,sagesse:888,puissance:400,tacle:90,pa:12,initiative:9999,niveau:10}))assert.notEqual(panelValues[k],bad,'valeur du chat ou des quêtes reprise : '+k);
+ results.push('En-tête du panneau : nom du personnage et classe lus');
  results.push(`Panneau Caractéristiques Dofus 3 : ${found.length}/${Object.keys(expected).length} valeurs exactes, aucune fausse, chat/quêtes/zone ignorés`);
  assert.deepEqual(await p.evaluate(()=>parseScanText('Dommages\nNeutre 38\nRésistances\nNeutre 0 0%\nTerre 2 3 %\nTacle 26 Fuite 25\n125 Force\nPoints de vie 2 095 / 2 095\nRésistances critiques −30')),{domNeutre:38,resNeutre:0,pctNeutre:0,resTerre:2,pctTerre:3,tacle:26,fuite:25,force:125,pv:2095,resCritique:-30});
  results.push('Texte : sections Dommages/Résistances, deux colonnes par ligne, valeur avant libellé, PV courants/max, signe moins');
@@ -49,6 +52,17 @@ const server=http.createServer((req,res)=>{const name=decodeURIComponent(req.url
  const after=await p.evaluate(()=>({lvl:state.perso.niveau,vita:state.stuff.caracs.vita.a,stat:state.stuff.caracs.stat.a,res:state.stuff.caracs.res.a,hist:state.guide.scanHistory.length,radar:!!document.querySelector('svg[aria-label="Diagramme radar des caractéristiques"]'),bars:/Dommages et résistances par élément/.test(document.body.textContent),trend:/Évolution sur/.test(document.body.textContent),valid:validSave(state)}));
  assert.deepEqual(after,{lvl:120,vita:900,stat:300,res:30,hist:2,radar:true,bars:true,trend:true,valid:true});
  results.push('Enregistrement : niveau, vitalité, stat principale et résistance moyenne appliqués ; historique, diagramme radar, barres et évolution affichés');
+ const names=await p.evaluate(async()=>{
+  const other=fillPerso({perso:{nom:'Aventurier'}});state.persos.push(other);const first=state.persos[0].id;state.activeId=first;
+  scanDraft={schema:'escouade.scan.v1',nom:'Aventurier',classe:'Xélor',at:Date.now(),values:{niveau:99},resources:[]};scanTarget=first;location.hash='scan';render();
+  const banner=!!document.querySelector('[data-scan="switch"]');document.querySelector('[data-scan="switch"]').click();await new Promise(r=>setTimeout(r,50));
+  const switched=state.activeId===other.id&&!!scanDraft&&scanDraft.nom==='Aventurier'&&!document.querySelector('[data-scan="switch"]');
+  const matched=scanMatchPerso('Aventuriet')?.id===other.id;
+  state.persos=state.persos.filter(p=>p.id!==other.id);state.activeId=first;scanDraft=null;render();
+  return {banner,switched,matched,classValid:validScan({schema:'escouade.scan.v1',nom:'x',at:1,values:{},resources:[],classe:'Inconnue'})};
+ });
+ assert.deepEqual(names,{banner:true,switched:true,matched:true,classValid:false});
+ results.push('Nom lu différent du personnage actif : proposition de passer sur ce personnage, faute de lecture tolérée, classe validée');
  const nativeResult=await p.evaluate(async png=>{
   const original={desktop,neutralino:window.Neutralino,path:window.NL_PATH};desktop=true;window.NL_PATH='C:/Test Escouade';let calls=[],readCount=0;
   const bytes=Uint8Array.from(atob(png),c=>c.charCodeAt(0)).buffer;

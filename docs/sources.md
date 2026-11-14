@@ -28,3 +28,8 @@ Les 19 contradictions entre liste générale et guides détaillés ont été rel
 - [Dofusdude](https://api.dofusdu.de/) (`dofus3/v1/fr/items/{equipment,resources,consumables}/all`) : banque d’objets hors ligne `src/items.js`, générée par `tools/sync_items.py`. Elle contient 2 533 équipements, armes, Dofus, trophées et montures des niveaux 1 à 120, avec leurs effets affichés, panoplies, recettes, noms des ingrédients, données d’arme et conditions. Les images et descriptions ne sont pas copiées ; chaque fiche renvoie vers DofusDB.
 - [Carte DofusDB](https://dofusdb.fr/fr/tools/map) : affichée dans Escouade depuis le site DofusDB, Internet nécessaire. Escouade copie seulement des commandes `/travel x,y` que le joueur colle lui-même.
 - Scan : disposition du panneau Caractéristiques de Dofus 3 relevée sur une capture fournie par Toka, utilisée localement pour les mesures et non versionnée. Le test automatique dessine un panneau synthétique équivalent.
+
+## Catalogue complet (1.6.1)
+
+- Export local « Catalogue Dofus » du 14 novembre 2026 fourni par Toka, réponses JSON de [Dofusdude](https://api.dofusdu.de/) pour la version de jeu 3.7.13.17 (canal main). Il comprend les équipements, ressources, consommables, objets de quête et cosmétiques (17 402 objets), 941 panoplies avec bonus et 308 montures. Les empreintes SHA-256 ont été contrôlées avant import et sont consignées dans `data/catalogue-provenance.json`.
+- `src/items.js` est généré par `python tools/sync_items.py --from <dossier donnees>`. Il ne contient ni images, ni descriptions, ni prix HDV, ni inventaire. Les objets sont reliés par `ankama_id`, les recettes par identifiant d’ingrédient.

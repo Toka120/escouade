@@ -1,0 +1,29 @@
+{
+  "generated": "2026-11-14",
+  "game": {
+    "version": "3.7.13.17",
+    "release": "main",
+    "update_stamp": "2026-11-05T15:38:10.596048145+01:00"
+  },
+  "source": "https://api.dofusdu.de/",
+  "from": "catalogue local",
+  "sha256": {
+    "version.json": "c48b530d55d6c820e9b5d635f1fe2947fe8c9337978d20756532c2203fac49a4",
+    "equipment.json": "fbf57bc1b167778e4929c86dd6aee978138dec86460a88eca0713d05f58ccb09",
+    "resources.json": "0c0f0ee23bc028f7c093d60da9b862ef136ac4226421ba7d9ab0e88aa9af90d4",
+    "consumables.json": "eeba2e4c11bc4d8fb9e8c719329b9bad4d85df80ee6976685a65e0b0aea6899c",
+    "quest.json": "3fa8efc332446b1ffe509d8e034e9bb0c459bc0892021c5fbb34ee02ef9215ba",
+    "cosmetics.json": "d44e826439d8ba4afa41d4a442a5a67bcf58b474cee7d2eab62425e701f66465",
+    "sets.json": "8a585d5706f7040f0b431fd6271eda58e02665fad94612173ba31d82cdc3c27c",
+    "mounts.json": "6aee2ac613ffca4c72586d3735626d369744f2f3ed837446c79bc9aad8c05005"
+  },
+  "counts": {
+    "Équipements": 4095,
+    "Ressources": 3521,
+    "Consommables": 3375,
+    "Objets de quête": 3918,
+    "Cosmétiques": 2493,
+    "Panoplies": 941,
+    "Montures (races)": 308
+  }
+}
