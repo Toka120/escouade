@@ -3,8 +3,15 @@ ESCOUADE 1.6.1 — VERSION DE TEST LOCALE
 Lancer Escouade.exe dans ce dossier. Garder resources.neu, Organisateur Escouade.exe et Capture Escouade.exe à côté.
 Si Escouade était ouverte pendant la livraison, la fermer puis la rouvrir.
 
+RACCOURCIS BUREAU ET RECHERCHE WINDOWS
+Double-cliquer une fois sur « Creer les raccourcis Escouade.cmd » : Escouade apparaît sur le Bureau
+et dans le menu Démarrer (taper « Escouade » dans la recherche). Les raccourcis démarrent Escouade
+dans ce dossier, donc avec tes sauvegardes. Garder ce dossier au même endroit ; si tu le déplaces,
+relance le script. « Retirer les raccourcis Escouade.cmd » les enlève. Aucune donnée n'est modifiée.
+
 Ce dossier contient :
 - Escouade.exe, resources.neu, Organisateur Escouade.exe, Capture Escouade.exe : application Windows 1.6.1.
+- Creer les raccourcis Escouade.cmd, Retirer les raccourcis Escouade.cmd, Raccourcis-Escouade.ps1, Escouade.ico : raccourcis.
 - Escouade-1.6.1-Windows.zip : paquet portable complet.
 - PATCHNOTES-1.6.1.md et PATCHNOTES-1.6.0.md : changements et tests réellement effectués.
 - UTILISER-LE-SCAN.md : lire le panneau Caractéristiques de Dofus.

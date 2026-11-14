@@ -115,6 +115,9 @@ def main():
     else:
         compiler=pathlib.Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
         subprocess.run([str(compiler),'/nologo','/target:winexe','/reference:System.Windows.Forms.dll','/reference:System.Drawing.dll','/reference:System.Core.dll','/out:'+str(out/'Capture Escouade.exe'),str(ROOT/'tools/Capture.cs')],check=True)
+    # Shortcut helper (Desktop + Start menu search) and its icon, kept next to the executable.
+    for extra in (ROOT/'tools/raccourcis').glob('*'):
+        if extra.is_file(): shutil.copy2(extra,out/extra.name)
     write_archive(resources,out/'resources.neu')
     assert read_archive(out/'resources.neu') == resources
     archive = args.out.resolve()/('Escouade-'+args.version+'-Windows.zip')
